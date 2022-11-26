@@ -6,29 +6,28 @@ iOS组件化
 实现协议
 
 Swift
-static func moduleDescription(description: ModuleDescription) {
-    description.moduleName("testSwift")
-        .method { method in
-            method.name("push")
-                  .selector(selector: #selector(push))
-        }
-        .method { method in
-            method.name("present")
-                  .selector(selector: #selector(present(dic:)))
-        }
-        .method { method in
-            method.name("log")
-                   .selector(selector: #selector(printLog(logString:)))
-        }
-}
 
-@objc func push() {
-}
-    
-@objc func present(dic: Dictionary<String, Any>) {
-}
+```swift
+   static func moduleDescription(description: ModuleDescription) {
+        description.moduleName("testSwift")
+            .method { method in
+                method.name("push")
+                      .selector(selector: #selector(push))
+            }
+            .method { method in
+                method.name("present")
+                      .selector(selector: #selector(present(dic:)))
+            }
+            .method { method in
+                method.name("log")
+                       .selector(selector: #selector(printLog(logString:)))
+            }
+    }
+```
 
 OC
+
+```objective-c
 + (void)moduleDescriptionWithDescription:(ModuleDescription * _Nonnull)description {
     description.moduleNameClosure(@"testOC")
         .methodClosure(^(ModuleMethod * moduleMethod) {
@@ -40,13 +39,18 @@ OC
             [moduleMethod name:@"present"];
         });
 }
-- (void)push:(NSDictionary *)dic {
-}
+```
 
-- (void)present:(NSDictionary *)dic {
-}
+调用
 
-###TODO
-解析url,通过url调用
-等等
+```swift
+Module.share.moduleName(moduleName: "testSwift", performSelectorName: "push", param: [:])
+```
 
+TODO
+
+解析Url,通过Url调用模块
+
+添加回调
+
+ 等等
