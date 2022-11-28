@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 class Module: NSObject {
     
     static let share = Module()
@@ -44,7 +45,13 @@ class Module: NSObject {
         }
         Module.moduleCache = tmpCache
     }
-    
+
+    /// 通过moduleName调用
+    /// - Parameters:
+    ///   - moduleName: 模块名
+    ///   - selectorName:   方法名
+    ///   - params:  参数
+    ///   - callback: 回调
     @objc public func invokeWithModuleName(_ moduleName: String,
                                  selectorName: String,
                                  params: Any? = nil,
@@ -57,11 +64,16 @@ class Module: NSObject {
     }
     
     
+    ///  通过url调用
+    /// - Parameters:
+    ///   - url: 协议  scheme://selectorName/moduleName?params   ->  scheme://open/myWallet?code=1111
+    ///   - callback: 回调
     @objc public func invokeWithUrl(_ url: String,
-                                    params: Any? = nil,
                                     callback: Any? = nil) {
-        // TODO 解析URL
-        
+        guard let url = URL.init(string: url) else {
+            return
+        }
+        self.invokeWithModuleName(url.module_name, selectorName: url.module_method, params: url.module_param, callback: callback)
     }
 }
 
@@ -112,3 +124,4 @@ extension UIViewController {
         }
     }
 }
+

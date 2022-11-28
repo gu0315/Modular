@@ -17,7 +17,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return tableView
     }()
     
-    let data:Array = ["push界面(Swift模块)", "present界面(Swift模块)", "组件调用Objc（Swift模块）", "push界面(OC模块)", "present界面(OC模块)"]
+    let data:Array = ["push界面(Swift模块)",
+                      "present界面(Swift模块)",
+                      "组件调用Objc（Swift模块）",
+                      "push界面(OC模块)",
+                      "present界面(OC模块)",
+                      "Url调用"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +75,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 "sex": 20,
                 "str": "1"
             ])
+        } else if (indexPath.row == 5) {
+            Module.share.invokeWithUrl("scheme://push/testSwift?code=1111", callback: nil)
         }
     }
 }
