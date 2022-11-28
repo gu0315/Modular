@@ -45,13 +45,8 @@ OC
 
 ```swift
 Module.share.moduleName(moduleName: "testSwift", performSelectorName: "push", param: [:])
+Module.share.invokeWithUrl("scheme://push/testSwift?code=1111", callback: nil)
 ```
-
-
-```swift
- Module.share.invokeWithUrl("scheme://push/testSwift?code=1111", callback: nil)
-```
-
 
 TODO
 
