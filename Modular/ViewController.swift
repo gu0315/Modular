@@ -17,7 +17,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return tableView
     }()
     
-    let data:Array = ["Swift语言push", "Swift语言present", "Swift语言调用方法", "调用OC->push", "调用OC->present"]
+    let data:Array = ["push界面(Swift模块)", "present界面(Swift模块)", "组件调用Objc（Swift模块）", "push界面(OC模块)", "present界面(OC模块)"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,17 +37,39 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath.row == 0) {
-            Module.share.moduleName(moduleName: "testSwift", performSelectorName: "push", param: [:])
+            Module.share.moduleName(moduleName: "testSwift", performSelectorName: "push", param: [
+                "id": "1",
+                "name": "顾钱想",
+                "sex": 20,
+                "str": "1"
+            ])
         } else if (indexPath.row == 1) {
-            Module.share.moduleName(moduleName: "testSwift", performSelectorName: "present", param: [:])
+            Module.share.moduleName(moduleName: "testSwift", performSelectorName: "present", param: [
+                "id": "1",
+                "name": "顾钱想",
+                "sex": 20,
+                "str": "1"
+            ])
         } else if (indexPath.row == 2) {
-            Module.share.moduleName(moduleName: "testSwift", performSelectorName: "log", param: [
-                "key": "value"
+            Module.share.moduleName(moduleName: "TestObjc", performSelectorName: "alert", param: [
+                "id": "1",
+                "name": "顾钱想",
+                "sex": 20
             ])
         } else if (indexPath.row == 3) {
-            Module.share.moduleName(moduleName: "testOC", performSelectorName: "push", param: [:])
+            Module.share.moduleName(moduleName: "testOC", performSelectorName: "push", param: [
+                "id": "1",
+                "name": "顾钱想",
+                "sex": 20,
+                "str": "1"
+            ])
         } else if (indexPath.row == 4) {
-            Module.share.moduleName(moduleName: "testOC", performSelectorName: "present", param: [:])
+            Module.share.moduleName(moduleName: "testOC", performSelectorName: "present", param: [
+                "id": "1",
+                "name": "顾钱想",
+                "sex": 20,
+                "str": "1"
+            ])
         }
     }
 }

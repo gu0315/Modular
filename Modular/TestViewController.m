@@ -17,6 +17,11 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     // Do any additional setup after loading the view.
+    UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height)];
+    lab.textAlignment = NSTextAlignmentCenter;
+    lab.numberOfLines = 0;
+    [self.view addSubview:lab];
+    lab.text = self.str;
 }
 
 /*
@@ -30,13 +35,27 @@
 */
 
 - (void)push:(NSDictionary *)dic {
-    UIViewController *vc = [[TestViewController alloc] init];
+    TestViewController *vc = [[TestViewController alloc] init];
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&error];
+    if (!jsonData) {
+        vc.str =  @"{}";
+    } else {
+        vc.str = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
     UIViewController *topVc = [UIViewController applicationTopVC];
     [topVc.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)present:(NSDictionary *)dic {
-    UIViewController *vc = [[TestViewController alloc] init];
+    TestViewController *vc = [[TestViewController alloc] init];
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&error];
+    if (!jsonData) {
+        vc.str =  @"{}";
+    } else {
+        vc.str = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
     UIViewController *topVc = [UIViewController applicationTopVC];
     [topVc presentViewController:vc animated:YES completion:nil];
 }
