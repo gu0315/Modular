@@ -47,8 +47,9 @@ class ModuleMethod: NSObject {
         return self
     }
     
+    // Native调用
     @objc func performWithParams(param: Any? = nil,
-                                 otherParam: Any? = nil) {
+                                 callback: Any? = nil) {
         let cls: AnyClass = self.module!.moduleClass
         guard let objcet = cls as? NSObject.Type else {
             return
@@ -57,14 +58,16 @@ class ModuleMethod: NSObject {
         guard let selector = self.methodSelector else {
             return
         }
-        controller.perform(selector, with: param, with: otherParam)
+        controller.perform(selector, with: param, with: callback)
     }
     
+    // H5或者Native调用
     @objc func performWithUrl(url: String? = nil,
-                              otherParam: Any? = nil) {
+                              callback: Any? = nil) {
         if (self.isNativeMethod) {
             return
         }
+        // 解析Url
         let cls: AnyClass = self.module!.moduleClass
         guard let objcet = cls as? NSObject.Type else {
             return
@@ -73,6 +76,6 @@ class ModuleMethod: NSObject {
         guard let selector = self.methodSelector else {
             return
         }
-        controller.perform(selector, with: url, with: otherParam)
+        controller.perform(selector, with: url, with: callback)
     }
 }

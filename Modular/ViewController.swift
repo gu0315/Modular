@@ -37,34 +37,34 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath.row == 0) {
-            Module.share.moduleName(moduleName: "testSwift", performSelectorName: "push", param: [
+            Module.share.invokeWithModuleName("testSwift", selectorName: "push", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,
                 "str": "1"
             ])
         } else if (indexPath.row == 1) {
-            Module.share.moduleName(moduleName: "testSwift", performSelectorName: "present", param: [
+            Module.share.invokeWithModuleName("testSwift", selectorName: "present", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,
                 "str": "1"
             ])
         } else if (indexPath.row == 2) {
-            Module.share.moduleName(moduleName: "TestObjc", performSelectorName: "alert", param: [
+            Module.share.invokeWithModuleName("TestObjc", selectorName: "alert", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20
             ])
         } else if (indexPath.row == 3) {
-            Module.share.moduleName(moduleName: "testOC", performSelectorName: "push", param: [
+            Module.share.invokeWithModuleName("testOC", selectorName: "push", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,
                 "str": "1"
             ])
         } else if (indexPath.row == 4) {
-            Module.share.moduleName(moduleName: "testOC", performSelectorName: "present", param: [
+            Module.share.invokeWithModuleName("testOC", selectorName: "present", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,

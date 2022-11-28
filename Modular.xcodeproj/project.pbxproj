@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E677E2F7293456AF00C57961 /* TestObjc.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677E2F6293456AF00C57961 /* TestObjc.swift */; };
+		E677E30429347FB100C57961 /* ModuleInvoke.m in Sources */ = {isa = PBXBuildFile; fileRef = E677E30329347FB100C57961 /* ModuleInvoke.m */; };
 		E6FF9D1E292D0EA700C4CF11 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF9D1D292D0EA700C4CF11 /* AppDelegate.swift */; };
 		E6FF9D20292D0EA700C4CF11 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF9D1F292D0EA700C4CF11 /* SceneDelegate.swift */; };
 		E6FF9D22292D0EA700C4CF11 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF9D21292D0EA700C4CF11 /* ViewController.swift */; };
@@ -45,6 +46,8 @@
 
 /* Begin PBXFileReference section */
 		E677E2F6293456AF00C57961 /* TestObjc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestObjc.swift; sourceTree = "<group>"; };
+		E677E30229347FB100C57961 /* ModuleInvoke.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ModuleInvoke.h; sourceTree = "<group>"; };
+		E677E30329347FB100C57961 /* ModuleInvoke.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ModuleInvoke.m; sourceTree = "<group>"; };
 		E6FF9D1A292D0EA700C4CF11 /* Modular.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Modular.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6FF9D1D292D0EA700C4CF11 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E6FF9D1F292D0EA700C4CF11 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -161,6 +164,8 @@
 				E6FF9D54292D198700C4CF11 /* ModuleProtocol.swift */,
 				E6FF9D64292D241700C4CF11 /* ModuleDescription.swift */,
 				E6FF9D66292DCD1500C4CF11 /* ModuleMethod.swift */,
+				E677E30229347FB100C57961 /* ModuleInvoke.h */,
+				E677E30329347FB100C57961 /* ModuleInvoke.m */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -308,6 +313,7 @@
 				E6FF9D20292D0EA700C4CF11 /* SceneDelegate.swift in Sources */,
 				E6FF9D5F292D1F3A00C4CF11 /* TestViewController.m in Sources */,
 				E6FF9D61292D227500C4CF11 /* TestSwiftViewController.swift in Sources */,
+				E677E30429347FB100C57961 /* ModuleInvoke.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

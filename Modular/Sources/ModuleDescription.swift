@@ -11,7 +11,7 @@ public class ModuleDescription: NSObject {
     // 协议的类做绑定
     var moduleClass: AnyClass
     // 为类设置别名
-    public var moduleName: String?
+    public var moduleName: String
     // 模块和方法绑定
     var moduleMethods: Dictionary<String, ModuleMethod> = [:]
     
@@ -22,6 +22,7 @@ public class ModuleDescription: NSObject {
     
     init(moduleClass: AnyClass) {
         self.moduleClass = moduleClass
+        self.moduleName = ""
         super.init()
         if (self.moduleNameClosure == nil) {
             self.moduleNameClosure = { name  in

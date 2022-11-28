@@ -1,7 +1,7 @@
 //
 //  Modular.swift
 //  Modular
-//  核心类
+//
 //  Created by 顾钱想 on 2022/11/22.
 //
 
@@ -29,44 +29,47 @@ class Module: NSObject {
         var tmpCache: Dictionary<String, ModuleDescription> = [:]
         for cls in classes {
             if (class_conformsToProtocol(cls, ModuleProtocol.self)) {
-                let moduleDes: ModuleDescription
                 if cls.responds(to: Selector.init(("moduleDescriptionWithDescription:"))) {
-                    print(String(cString: class_getName(cls)))
+                    let moduleDes: ModuleDescription
+                    // 关联
                     moduleDes = ModuleDescription.init(moduleClass: cls)
                     cls.moduleDescription?(description: moduleDes)
-                } else {
-                    moduleDes = compatibleModuleWithClass(cls: cls)
+                    // 如果实现了moduleDescription协议为设置moduleName
+                    assert(!moduleDes.moduleName.isEmpty, "❌❌❌❌❌❌ in \(String(cString: class_getName(cls))), moduleName is undefined, please check!")
+                    // 是否重复设置了模块名
+                    assert((tmpCache[moduleDes.moduleName] == nil), "❌❌❌❌❌❌ in \(String(cString: class_getName(cls))), module \(moduleDes.moduleName) has defined, please check!")
+                    tmpCache[moduleDes.moduleName] = moduleDes
                 }
-                assert(((moduleDes.moduleName?.isEmpty) != nil), "moduleName is nil")
-                assert((tmpCache[moduleDes.moduleName ?? ""] == nil), "in \(String(cString: class_getName(cls))), module \(moduleDes.moduleName ?? "") has defined, please check!")
-                tmpCache[moduleDes.moduleName ?? ""] = moduleDes
             }
         }
         Module.moduleCache = tmpCache
     }
     
-    private func compatibleModuleWithClass(cls: AnyClass) -> ModuleDescription {
-        // TODO
-        return ModuleDescription.init(moduleClass: cls)
+    @objc public func invokeWithModuleName(_ moduleName: String,
+                                 selectorName: String,
+                                 params: Any? = nil,
+                                 callback: Any? = nil) {
+        let moduleDescription = Module.moduleCache[moduleName]
+        let method = moduleDescription?.moduleMethods[selectorName]
+        if ((method) != nil) {
+            method?.performWithParams(param: params, callback: callback)
+        }
     }
     
-    @objc public func moduleName(moduleName: String,
-                                 performSelectorName: String,
-                                 param: Any? = nil,
-                                 otherParam: Any? = nil) {
-        let moduleDescription = Module.moduleCache[moduleName]
-        let method = moduleDescription?.moduleMethods[performSelectorName]
-        if ((method) != nil) {
-            method?.performWithParams(param: param, otherParam: otherParam)
-        }
+    
+    @objc public func invokeWithUrl(_ url: String,
+                                    params: Any? = nil,
+                                    callback: Any? = nil) {
+        // TODO 解析URL
+        
     }
 }
 
 
 extension UIViewController {
-    
+    // 获取最顶层的控制器
     @objc static func applicationTopVC() -> UIViewController? {
-        var window: UIWindow? = UIApplication.shared.keyWindow
+        var window: UIWindow? = UIApplication.shared.windows[0]
         if window?.windowLevel != UIWindow.Level.normal {
             let windows = UIApplication.shared.windows
             for tmpWin: UIWindow in windows {
@@ -81,7 +84,7 @@ extension UIViewController {
     
     static func topViewControllerWithRootViewController(rootViewController: UIViewController?) -> UIViewController? {
         if rootViewController == nil {
-            print("xxxxxxxx无根控制器xxxxxxxx")
+            print("❌❌❌❌❌❌无根控制器❌❌❌❌❌❌")
             return nil
         }
         if let vc = rootViewController as? UITabBarController {
@@ -108,5 +111,4 @@ extension UIViewController {
             return rootViewController
         }
     }
-
 }
