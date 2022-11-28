@@ -47,10 +47,12 @@ OC
 Module.share.moduleName(moduleName: "testSwift", performSelectorName: "push", param: [:])
 ```
 
+
+```swift
+ Module.share.invokeWithUrl("scheme://push/testSwift?code=1111", callback: nil)
+```
+
+
 TODO
 
-解析Url,通过Url调用模块
-
-添加回调
-
- 等等
+添加回调、参数检验、等等
