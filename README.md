@@ -8,21 +8,21 @@ iOS组件化
 Swift
 
 ```swift
-   static func moduleDescription(description: ModuleDescription) {
-        description.moduleName("testSwift")
-            .method { method in
-                method.name("push")
-                      .selector(selector: #selector(push))
-            }
-            .method { method in
-                method.name("present")
-                      .selector(selector: #selector(present(dic:)))
-            }
-            .method { method in
-                method.name("log")
-                       .selector(selector: #selector(printLog(logString:)))
-            }
-    }
+static func moduleDescription(description: ModuleDescription) {
+     description.moduleName("testSwift")
+         .method { method in
+             method.name("push")
+                   .selector(selector: #selector(push))
+         }
+         .method { method in
+             method.name("present")
+                   .selector(selector: #selector(present(dic:)))
+         }
+         .method { method in
+             method.name("log")
+                    .selector(selector: #selector(printLog(logString:)))
+         }
+ }
 ```
 
 OC
@@ -45,12 +45,9 @@ OC
 
 ```swift
 Module.share.moduleName(moduleName: "testSwift", performSelectorName: "push", param: [:])
+Module.share.invokeWithUrl("scheme://push/testSwift?code=1111", callback: nil)
 ```
 
 TODO
 
-解析Url,通过Url调用模块
-
-添加回调
-
- 等等
+添加回调、参数检验、等等
