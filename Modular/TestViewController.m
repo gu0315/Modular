@@ -43,7 +43,7 @@
     } else {
         vc.str = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     }
-    UIViewController *topVc = [UIViewController applicationTopVC];
+    UIViewController *topVc = [TestViewController applicationTopVC];
     [topVc.navigationController pushViewController:vc animated:YES];
 }
 
@@ -56,7 +56,7 @@
     } else {
         vc.str = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     }
-    UIViewController *topVc = [UIViewController applicationTopVC];
+    UIViewController *topVc = [self applicationTopVC];
     [topVc presentViewController:vc animated:YES completion:nil];
 }
 

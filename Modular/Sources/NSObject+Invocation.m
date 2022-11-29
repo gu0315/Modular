@@ -37,7 +37,6 @@
         }
         [invocation retainArguments];
         [invocation invoke];
-        
         //返回值判断
         NSUInteger length = sig.methodReturnLength;
         NSString *type = [NSString stringWithUTF8String:sig.methodReturnType];

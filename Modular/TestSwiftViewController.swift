@@ -52,7 +52,7 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
         let data = try? JSONSerialization.data(withJSONObject: dic, options: JSONSerialization.WritingOptions.init(rawValue: 0))
         let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
         vc.str = jsonStr! as String
-        guard let topVc = UIViewController.applicationTopVC() else {
+        guard let topVc = TestSwiftViewController.applicationTopVC() else {
             return 
         }
         topVc.navigationController?.pushViewController(vc, animated: true)
@@ -63,7 +63,7 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
         let data = try? JSONSerialization.data(withJSONObject: dic, options: JSONSerialization.WritingOptions.init(rawValue: 0))
         let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
         vc.str = jsonStr! as String
-        guard let topVc = UIViewController.applicationTopVC() else {
+        guard let topVc = TestSwiftViewController.applicationTopVC() else {
             return
         }
         topVc.present(vc, animated: true, completion: {})

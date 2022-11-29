@@ -8,6 +8,7 @@
 import UIKit
 
 
+
 class Module: NSObject {
     
     static let share = Module()
@@ -73,14 +74,33 @@ class Module: NSObject {
         guard let url = URL.init(string: url) else {
             return
         }
-        self.invokeWithModuleName(url.module_name, selectorName: url.module_method, params: url.module_params, callback: callback)
+        var module_name = ""
+        if url.pathComponents.count > 0 {
+            assert(url.pathComponents.count == 2, "❌❌❌❌❌❌ 请检查这个协议\(url)的moduleName设置是否正确")
+            var names = url.pathComponents
+            names.remove(at: 0)
+            module_name = names.first ?? ""
+        }
+        var module_params: [String: Any] = [:]
+        if ((url.query) != nil) {
+            for pair in url.query!.components(separatedBy: "&") {
+                let key = pair.components(separatedBy: "=")[0]
+                let value = pair
+                    .components(separatedBy:"=")[1]
+                    .replacingOccurrences(of: "+", with: " ")
+                    .removingPercentEncoding ?? ""
+                module_params[key] = value
+            }
+        }
+        self.invokeWithModuleName(module_name, selectorName: url.host ?? "", params: module_params, callback: callback)
     }
 }
 
 
-extension UIViewController {
+
+extension NSObject {
     // 获取最顶层的控制器
-    @objc static func applicationTopVC() -> UIViewController? {
+    @objc class func applicationTopVC() -> UIViewController? {
         var window: UIWindow? = UIApplication.shared.windows[0]
         if window?.windowLevel != UIWindow.Level.normal {
             let windows = UIApplication.shared.windows
@@ -124,4 +144,3 @@ extension UIViewController {
         }
     }
 }
-

@@ -7,6 +7,13 @@
 
 import UIKit
 
+@objc (ModuleProtocol)
+
+public protocol ModuleProtocol: NSObjectProtocol {
+    /// 模块描述协议
+    @objc static func moduleDescription(description: ModuleDescription)
+}
+
 public class ModuleDescription: NSObject {
     // 协议的类做绑定
     var moduleClass: AnyClass
