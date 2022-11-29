@@ -40,20 +40,21 @@ class ModuleMethod: NSObject {
     }
     
     // 调用
-    @objc func performWithParams(param: Any? = nil,
+    @objc func performWithParams(params: Any? = nil,
                                  callback: Any? = nil) {
         let cls: AnyClass = self.module!.moduleClass
         guard let objcet = cls as? NSObject.Type else {
             return
         }
-        guard let selector = self.methodSelector else {
+        guard let sel = self.methodSelector else {
             return
         }
         if (self.isClassMethod) {
-            objcet.perform(selector, with: param, with: callback)
+            objcet.perform(sel, with: params, with: callback)
         } else {
             let controller = objcet.init()
-            controller.perform(selector, with: param, with: callback)
+            controller.perform(sel, with: params, with: callback)
         }
+        //self.invocation(with: cls, sel: sel, isClassMethod: self.isClassMethod, args: ["key":"value"], callback: nil)
     }
 }

@@ -25,7 +25,7 @@ public extension URL {
     }
     
     // URL中的参数
-    var module_param: [String: Any]? {
+    var module_params: [String: Any]? {
         guard let query = self.query else { return nil}
         var queryStrings = [String: String]()
         for pair in query.components(separatedBy: "&") {

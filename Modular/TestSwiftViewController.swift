@@ -22,6 +22,7 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         self.lab.text = str
+    
     }
     
     static func moduleDescription(description: ModuleDescription) {
@@ -52,7 +53,7 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
         let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
         vc.str = jsonStr! as String
         guard let topVc = UIViewController.applicationTopVC() else {
-            return
+            return 
         }
         topVc.navigationController?.pushViewController(vc, animated: true)
     }

@@ -54,12 +54,12 @@ class Module: NSObject {
     ///   - callback: 回调
     @objc public func invokeWithModuleName(_ moduleName: String,
                                  selectorName: String,
-                                 params: Any? = nil,
+                                 params: [String: Any]? = nil,
                                  callback: Any? = nil) {
         let moduleDescription = Module.moduleCache[moduleName]
         let method = moduleDescription?.moduleMethods[selectorName]
         if ((method) != nil) {
-            method?.performWithParams(param: params, callback: callback)
+            method?.performWithParams(params: params, callback: callback)
         }
     }
     
@@ -73,7 +73,7 @@ class Module: NSObject {
         guard let url = URL.init(string: url) else {
             return
         }
-        self.invokeWithModuleName(url.module_name, selectorName: url.module_method, params: url.module_param, callback: callback)
+        self.invokeWithModuleName(url.module_name, selectorName: url.module_method, params: url.module_params, callback: callback)
     }
 }
 
