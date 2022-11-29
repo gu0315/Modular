@@ -12,10 +12,8 @@ class ModuleMethod: NSObject {
     private var methodSelector: Selector?
     // 模块方法对应的别名
     var methodName: String?
-    // true表示方法只能被native方式调用，false表示可以使用URL方式调用，默认false
-    private var isNativeMethod = false
     // true表示是类方法，false表示是实例方法，默认false
-    private var isClassMethod = false
+    var isClassMethod = false
     // 对所属module的弱引用
     weak var module: ModuleDescription?
     
@@ -36,46 +34,26 @@ class ModuleMethod: NSObject {
     }
     
     @discardableResult
-    @objc func isNativeMethod(isNativeMethod: Bool) -> ModuleMethod {
-        self.isNativeMethod = isNativeMethod
-        return self
-    }
-    
-    @discardableResult
-    @objc func isClassMethod(isClassMethod: Bool) -> ModuleMethod {
+    @objc func isClassMethod(_ isClassMethod: Bool) -> ModuleMethod {
         self.isClassMethod = isClassMethod
         return self
     }
     
-    // Native调用
+    // 调用
     @objc func performWithParams(param: Any? = nil,
                                  callback: Any? = nil) {
         let cls: AnyClass = self.module!.moduleClass
         guard let objcet = cls as? NSObject.Type else {
             return
         }
-        let controller = objcet.init()
         guard let selector = self.methodSelector else {
             return
         }
-        controller.perform(selector, with: param, with: callback)
-    }
-    
-    // H5或者Native调用
-    @objc func performWithUrl(url: String? = nil,
-                              callback: Any? = nil) {
-        if (self.isNativeMethod) {
-            return
+        if (self.isClassMethod) {
+            objcet.perform(selector, with: param, with: callback)
+        } else {
+            let controller = objcet.init()
+            controller.perform(selector, with: param, with: callback)
         }
-        // 解析Url
-        let cls: AnyClass = self.module!.moduleClass
-        guard let objcet = cls as? NSObject.Type else {
-            return
-        }
-        let controller = objcet.init()
-        guard let selector = self.methodSelector else {
-            return
-        }
-        controller.perform(selector, with: url, with: callback)
     }
 }

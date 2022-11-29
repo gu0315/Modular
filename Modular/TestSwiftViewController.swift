@@ -27,6 +27,7 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
     static func moduleDescription(description: ModuleDescription) {
         description.moduleName("testSwift")
             .method { method in
+                method.isClassMethod(true)
                 method.name("push")
                       .selector(selector: #selector(push))
             }
@@ -45,7 +46,7 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
         print(logString)
     }
 
-    @objc func push(dic: Dictionary<String, Any> = [:]) {
+    @objc class func push(dic: Dictionary<String, Any> = [:]) {
         let vc = TestSwiftViewController()
         let data = try? JSONSerialization.data(withJSONObject: dic, options: JSONSerialization.WritingOptions.init(rawValue: 0))
         let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
