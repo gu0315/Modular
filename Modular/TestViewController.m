@@ -47,7 +47,7 @@
     [topVc.navigationController pushViewController:vc animated:YES];
 }
 
-- (void)present:(NSDictionary *)dic {
++ (void)present:(NSDictionary *)dic {
     TestViewController *vc = [[TestViewController alloc] init];
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&error];
@@ -69,6 +69,7 @@
         .methodClosure(^(ModuleMethod * moduleMethod) {
             [moduleMethod selectorWithSelector: @selector(present:)];
             [moduleMethod name:@"present"];
+            [moduleMethod isClassMethod:YES];
         });
 }
 
