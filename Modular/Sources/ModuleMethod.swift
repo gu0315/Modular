@@ -39,7 +39,7 @@ class ModuleMethod: NSObject {
         return self
     }
     
-    // 调用
+    // 执行方法
     @objc func performWithParams(params: Any? = nil,
                                  callback: Any? = nil) {
         let cls: AnyClass = self.module!.moduleClass
