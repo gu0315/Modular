@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-    s.name         = "Modular"
+    s.name         = "SModular"
     s.version      = "0.0.1"
     s.ios.deployment_target = '13.0'
     s.summary      = "Modular"
