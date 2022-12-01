@@ -15,21 +15,20 @@ public protocol ModuleProtocol: NSObjectProtocol {
 }
 
 public class ModuleDescription: NSObject {
-    // 协议的类做绑定
+    // 实现协议的类做绑定
     var moduleClass: AnyClass
-    // 为类设置别名
-    public var moduleName: String
-    // 模块和方法绑定
+    // 模块名称, 默认为空
+    var moduleName: String = ""
+    // 模块关联的方法
     var moduleMethods: Dictionary<String, ModuleMethod> = [:]
     
-    // 为兼容Objcet-C链式调用
+    // Objcet-C链式调用设置moduleName
     @objc var moduleNameClosure: ((String) -> ModuleDescription)?
-
+    // Objcet-C链式调用设置method
     @objc var methodClosure: (((ModuleMethod)->()) -> ModuleDescription)?
     
     init(moduleClass: AnyClass) {
         self.moduleClass = moduleClass
-        self.moduleName = ""
         super.init()
         if (self.moduleNameClosure == nil) {
             self.moduleNameClosure = { name  in

@@ -129,6 +129,8 @@
 				E6FF9D5D292D1F3A00C4CF11 /* TestViewController.h */,
 				E6FF9D5E292D1F3A00C4CF11 /* TestViewController.m */,
 				E6FF9D56292D1D0200C4CF11 /* Modular-Bridging-Header.h */,
+				E677E30E29362BF000C57961 /* NSObject+Invocation.h */,
+				E677E30F29362BF000C57961 /* NSObject+Invocation.m */,
 				E6FF9D23292D0EA700C4CF11 /* Main.storyboard */,
 				E6FF9D26292D0EA800C4CF11 /* Assets.xcassets */,
 				E6FF9D28292D0EA800C4CF11 /* LaunchScreen.storyboard */,
@@ -161,8 +163,6 @@
 				E6FF9D50292D0FC900C4CF11 /* Module.swift */,
 				E6FF9D64292D241700C4CF11 /* ModuleDescription.swift */,
 				E6FF9D66292DCD1500C4CF11 /* ModuleMethod.swift */,
-				E677E30E29362BF000C57961 /* NSObject+Invocation.h */,
-				E677E30F29362BF000C57961 /* NSObject+Invocation.m */,
 			);
 			path = Sources;
 			sourceTree = "<group>";

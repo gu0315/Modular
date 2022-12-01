@@ -22,7 +22,10 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         self.lab.text = str
+    }
     
+    deinit {
+        print("TestSwiftViewController->deinit")
     }
     
     static func moduleDescription(description: ModuleDescription) {

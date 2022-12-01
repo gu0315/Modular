@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 class Module: NSObject {
     
     static let share = Module()
@@ -36,9 +34,9 @@ class Module: NSObject {
                     // 关联
                     moduleDes = ModuleDescription.init(moduleClass: cls)
                     cls.moduleDescription?(description: moduleDes)
-                    // 如果实现了moduleDescription协议为设置moduleName
+                    // 实现了moduleDescription协议未设置moduleName
                     assert(!moduleDes.moduleName.isEmpty, "❌❌❌❌❌❌ in \(String(cString: class_getName(cls))), moduleName is undefined, please check!")
-                    // 是否重复设置了模块名
+                    // 重复设置了模块名
                     assert((tmpCache[moduleDes.moduleName] == nil), "❌❌❌❌❌❌ in \(String(cString: class_getName(cls))), module \(moduleDes.moduleName) has defined, please check!")
                     tmpCache[moduleDes.moduleName] = moduleDes
                 }
@@ -64,7 +62,6 @@ class Module: NSObject {
         }
     }
     
-    
     ///  通过url调用
     /// - Parameters:
     ///   - url: 协议  scheme://selectorName/moduleName?params   ->  scheme://open/myWallet?code=1111
@@ -81,6 +78,7 @@ class Module: NSObject {
             names.remove(at: 0)
             module_name = names.first ?? ""
         }
+        let selectorName = url.host ?? ""
         var module_params: [String: Any] = [:]
         if ((url.query) != nil) {
             for pair in url.query!.components(separatedBy: "&") {
@@ -92,55 +90,7 @@ class Module: NSObject {
                 module_params[key] = value
             }
         }
-        self.invokeWithModuleName(module_name, selectorName: url.host ?? "", params: module_params, callback: callback)
+        self.invokeWithModuleName(module_name, selectorName: selectorName, params: module_params, callback: callback)
     }
 }
 
-
-
-extension NSObject {
-    // 获取最顶层的控制器
-    @objc class func applicationTopVC() -> UIViewController? {
-        var window: UIWindow? = UIApplication.shared.windows[0]
-        if window?.windowLevel != UIWindow.Level.normal {
-            let windows = UIApplication.shared.windows
-            for tmpWin: UIWindow in windows {
-                if tmpWin.windowLevel == UIWindow.Level.normal {
-                    window = tmpWin
-                    break
-                }
-            }
-        }
-        return self.topViewControllerWithRootViewController(rootViewController: window?.rootViewController)
-    }
-    
-    static func topViewControllerWithRootViewController(rootViewController: UIViewController?) -> UIViewController? {
-        if rootViewController == nil {
-            print("❌❌❌❌❌❌无根控制器❌❌❌❌❌❌")
-            return nil
-        }
-        if let vc = rootViewController as? UITabBarController {
-            if vc.viewControllers != nil {
-                return topViewControllerWithRootViewController(rootViewController: vc.selectedViewController)
-            } else {
-                return vc
-            }
-        } else if let vc = rootViewController as? UINavigationController {
-            if vc.viewControllers.count > 0 {
-                return topViewControllerWithRootViewController(rootViewController: vc.visibleViewController)
-            } else {
-                return vc
-            }
-        } else if let vc = rootViewController as? UISplitViewController {
-            if vc.viewControllers.count > 0 {
-                return topViewControllerWithRootViewController(rootViewController: vc.viewControllers.last)
-            } else {
-                return vc
-            }
-        } else if let vc = rootViewController?.presentedViewController {
-            return topViewControllerWithRootViewController(rootViewController: vc)
-        } else {
-            return rootViewController
-        }
-    }
-}

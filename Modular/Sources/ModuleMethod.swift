@@ -9,7 +9,7 @@ import UIKit
 
 class ModuleMethod: NSObject {
     // 模块方法对应的selector
-    private var methodSelector: Selector?
+    var methodSelector: Selector?
     // 模块方法对应的别名
     var methodName: String?
     // true表示是类方法，false表示是实例方法，默认false
@@ -43,18 +43,14 @@ class ModuleMethod: NSObject {
     @objc func performWithParams(params: Any? = nil,
                                  callback: Any? = nil) {
         let cls: AnyClass = self.module!.moduleClass
-        guard let objcet = cls as? NSObject.Type else {
-            return
-        }
-        guard let sel = self.methodSelector else {
-            return
-        }
+        guard let objcet = cls as? NSObject.Type else { return }
+        guard let sel = self.methodSelector else { return }
         if (self.isClassMethod) {
+            // 类方法调用
             objcet.perform(sel, with: params, with: callback)
         } else {
-            let controller = objcet.init()
-            controller.perform(sel, with: params, with: callback)
+            // 实列方法调用
+            objcet.init().perform(sel, with: params, with: callback)
         }
-        //self.invocation(with: cls, sel: sel, isClassMethod: self.isClassMethod, args: ["key":"value"], callback: nil)
     }
 }
