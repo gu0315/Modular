@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
     s.author             = { "顾钱想" => "228383741@qq.com" }
     s.social_media_url   = "https://www.jianshu.com/p/0ea1a4c49fba"
     s.source       = { :git => "https://github.com/gu0315/Modular.git", :tag => s.version }
-    s.source_files  = "DropDownMenuDemo/DropDownMenu"
+    s.source_files  = "Modular/Sources"
     s.swift_version = "5.0"
     s.swift_versions = ['5.0', '5.1']
 end
