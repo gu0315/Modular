@@ -23,9 +23,9 @@ public class ModuleDescription: NSObject {
     var moduleMethods: Dictionary<String, ModuleMethod> = [:]
     
     // Objcet-C链式调用设置moduleName
-    @objc var moduleNameClosure: ((String) -> ModuleDescription)?
+    @objc public var moduleNameClosure: ((String) -> ModuleDescription)?
     // Objcet-C链式调用设置method
-    @objc var methodClosure: (((ModuleMethod)->()) -> ModuleDescription)?
+    @objc public var methodClosure: (((ModuleMethod)->()) -> ModuleDescription)?
     
     init(moduleClass: AnyClass) {
         self.moduleClass = moduleClass
@@ -52,13 +52,13 @@ public class ModuleDescription: NSObject {
     }
     
     @discardableResult
-    @objc func moduleName(_ name: String) ->ModuleDescription {
+    @objc public func moduleName(_ name: String) ->ModuleDescription {
         moduleName = name
         return self
     }
    
     @discardableResult
-    @objc func method(methodDescriptionClosure:(ModuleMethod)->())-> ModuleDescription {
+    @objc public func method(methodDescriptionClosure:(ModuleMethod)->())-> ModuleDescription {
         let moduleMethod = ModuleMethod()
         moduleMethod.module = self
         methodDescriptionClosure(moduleMethod)

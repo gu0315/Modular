@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ModuleMethod: NSObject {
+public class ModuleMethod: NSObject {
     // 模块方法对应的selector
     var methodSelector: Selector?
     // 模块方法对应的别名
@@ -22,25 +22,25 @@ class ModuleMethod: NSObject {
     }
    
     @discardableResult
-    @objc func name(_ name: String) ->ModuleMethod {
+    @objc public  func name(_ name: String) ->ModuleMethod {
         self.methodName = name
         return self
     }
     
     @discardableResult
-    @objc func selector(selector: Selector) -> ModuleMethod {
+    @objc public func selector(selector: Selector) -> ModuleMethod {
         self.methodSelector = selector
         return self
     }
     
     @discardableResult
-    @objc func isClassMethod(_ isClassMethod: Bool) -> ModuleMethod {
+    @objc public func isClassMethod(_ isClassMethod: Bool) -> ModuleMethod {
         self.isClassMethod = isClassMethod
         return self
     }
     
     // 执行方法
-    @objc func performWithParams(params: Any? = nil,
+    @objc public func performWithParams(params: Any? = nil,
                                  callback: Any? = nil) {
         let cls: AnyClass = self.module!.moduleClass
         guard let objcet = cls as? NSObject.Type else { return }

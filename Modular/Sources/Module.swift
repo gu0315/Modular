@@ -7,9 +7,9 @@
 
 import UIKit
 
-class Module: NSObject {
+public class Module: NSObject {
     
-    static let share = Module()
+    public static let share = Module()
     
     static var moduleCache: Dictionary<String, ModuleDescription> = [:]
     
