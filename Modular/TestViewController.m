@@ -34,7 +34,7 @@
 }
 */
 
-- (void)push:(NSDictionary *)dic {
+- (void)push:(NSDictionary *)dic callback:(void(^ __nullable)( NSDictionary * _Nullable moduleInfo))callback {
     TestViewController *vc = [[TestViewController alloc] init];
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&error];
@@ -43,6 +43,7 @@
     } else {
         vc.str = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     }
+    callback(@{@"key":@"value"});
     UIViewController *topVc = [TestViewController applicationTopVC];
     [topVc.navigationController pushViewController:vc animated:YES];
 }
@@ -63,7 +64,7 @@
 + (void)moduleDescriptionWithDescription:(ModuleDescription * _Nonnull)description {
     description.moduleNameClosure(@"testOC")
         .methodClosure(^(ModuleMethod * moduleMethod) {
-            [moduleMethod selectorWithSelector: @selector(push:)];
+            [moduleMethod selectorWithSelector: @selector(push:callback:)];
             [moduleMethod name:@"push"];
         })
         .methodClosure(^(ModuleMethod * moduleMethod) {

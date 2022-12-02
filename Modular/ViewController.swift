@@ -69,12 +69,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 "sex": 20
             ])
         } else if (indexPath.row == 3) {
-            Module.share.invokeWithModuleName("testOC", selectorName: "push", params: [
+            Module.share.invokeWithModuleNameCallback("testOC", selectorName: "push", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,
                 "str": "1"
-            ])
+            ]) { parameters in
+                print("调用模块方法的回调-》", parameters)
+            }
         } else if (indexPath.row == 4) {
             Module.share.invokeWithModuleName("testOC", selectorName: "present", params: [
                 "id": "1",
