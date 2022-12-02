@@ -56,4 +56,4 @@ Module.share.invokeWithUrl("scheme://push/testSwift?code=1111", callback: nil)
 
 TODO
 
-添加回调、参数检验、等等
+参数检验、等等
