@@ -18,6 +18,9 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
     
     var str: String = ""
     
+    /* 参数回调 */
+    private var callBackParameters: (([String : Any]) -> Void)?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -33,7 +36,7 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
             .method { method in
                 method.isClassMethod(true)
                 method.name("push")
-                      .selector(selector: #selector(push))
+                    .selector(selector: #selector(push(dic:callback:)))
             }
             .method { method in
                 method.name("present")
@@ -50,7 +53,9 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
         print(logString)
     }
 
-    @objc class func push(dic: Dictionary<String, Any> = [:]) {
+
+    
+    @objc class func push(dic: Dictionary<String, Any> = [:], callback: @convention(block) ([String: Any]) -> Void) {
         let vc = TestSwiftViewController()
         let data = try? JSONSerialization.data(withJSONObject: dic, options: JSONSerialization.WritingOptions.init(rawValue: 0))
         let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
@@ -58,6 +63,7 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
         guard let topVc = TestSwiftViewController.applicationTopVC() else {
             return 
         }
+        callback(dic)
         topVc.navigationController?.pushViewController(vc, animated: true)
     }
     

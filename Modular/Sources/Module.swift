@@ -13,6 +13,7 @@ public class Module: NSObject {
     
     static var moduleCache: Dictionary<String, ModuleDescription> = [:]
     
+    
     private override init() {
         super.init()
         self.cacheModuleProtocolClasses()
@@ -48,26 +49,39 @@ public class Module: NSObject {
     /// 通过moduleName调用
     /// - Parameters:
     ///   - moduleName: 模块名
-    ///   - selectorName:   方法名
-    ///   - params:  参数
-    ///   - callback: 回调
-    @objc public func invokeWithModuleName(_ moduleName: String,
+    ///   - selectorName: 模块方法
+    ///   - params:  模块参数
+    ///   - callback: 模块回调
+    @objc public func invokeWithModuleNameCallback(_ moduleName: String,
                                  selectorName: String,
                                  params: [String: Any]? = nil,
-                                 callback: Any? = nil) {
+                                 callback: @escaping @convention(block) ([String: Any]) -> Void) {
         let moduleDescription = Module.moduleCache[moduleName]
         let method = moduleDescription?.moduleMethods[selectorName]
         if ((method) != nil) {
-            method?.performWithParams(params: params, callback: callback)
+            method?.performCallbackWithParams(params: params, callback: callback)
+        }
+    }
+    
+    /// 通过moduleName调用
+    /// - Parameters:
+    ///   - moduleName: 模块名
+    ///   - selectorName: 模块方法
+    ///   - params:  模块参数
+    @objc public func invokeWithModuleName(_ moduleName: String,
+                                 selectorName: String,
+                                 params: [String: Any]? = nil){
+        let moduleDescription = Module.moduleCache[moduleName]
+        let method = moduleDescription?.moduleMethods[selectorName]
+        if ((method) != nil) {
+            method?.performWithParams(params: params)
         }
     }
     
     ///  通过url调用
     /// - Parameters:
     ///   - url: 协议  scheme://selectorName/moduleName?params   ->  scheme://open/myWallet?code=1111
-    ///   - callback: 回调
-    @objc public func invokeWithUrl(_ url: String,
-                                    callback: Any? = nil) {
+    @objc public func invokeWithUrl(_ url: String){
         guard let url = URL.init(string: url) else {
             return
         }
@@ -90,7 +104,8 @@ public class Module: NSObject {
                 module_params[key] = value
             }
         }
-        self.invokeWithModuleName(module_name, selectorName: selectorName, params: module_params, callback: callback)
+        self.invokeWithModuleName(module_name, selectorName: selectorName, params: module_params)
     }
 }
+
 

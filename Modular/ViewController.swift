@@ -8,6 +8,10 @@
 import UIKit
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
+    var callback: (Dictionary<String, Any>) -> Void = { dic in
+        print(dic)
+    }
 
     lazy var tableView: UITableView = {
         let tableView = UITableView.init(frame: self.view.frame)
@@ -42,12 +46,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath.row == 0) {
-            Module.share.invokeWithModuleName("testSwift", selectorName: "push", params: [
+            Module.share.invokeWithModuleNameCallback("testSwift", selectorName: "push", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,
                 "str": "1"
-            ])
+            ]) { parameters in
+                //页面参数回调
+                print("调用模块方法的回调-》", parameters)
+            }
         } else if (indexPath.row == 1) {
             Module.share.invokeWithModuleName("testSwift", selectorName: "present", params: [
                 "id": "1",
@@ -56,7 +63,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 "str": "1"
             ])
         } else if (indexPath.row == 2) {
-            Module.share.invokeWithModuleName("TestObjc", selectorName: "alert", params: [
+            Module.share.invokeWithModuleName("testSwift", selectorName: "alert", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20
@@ -76,7 +83,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 "str": "1"
             ])
         } else if (indexPath.row == 5) {
-            Module.share.invokeWithUrl("scheme://push/testSwift?code=1111", callback: nil)
+            Module.share.invokeWithUrl("scheme://push/testSwift?code=1111")
         }
     }
 }
