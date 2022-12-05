@@ -55,7 +55,7 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
 
 
     
-    @objc class func push(dic: Dictionary<String, Any> = [:], callback: @convention(block) ([String: Any]) -> Void) {
+    @objc class func push(dic: Dictionary<String, Any> = [:], callback: ([String: Any]) -> Void) {
         let vc = TestSwiftViewController()
         let data = try? JSONSerialization.data(withJSONObject: dic, options: JSONSerialization.WritingOptions.init(rawValue: 0))
         let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)

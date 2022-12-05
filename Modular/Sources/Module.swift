@@ -82,29 +82,8 @@ public class Module: NSObject {
     /// - Parameters:
     ///   - url: 协议  scheme://selectorName/moduleName?params   ->  scheme://open/myWallet?code=1111
     @objc public func invokeWithUrl(_ url: String){
-        guard let url = URL.init(string: url) else {
-            return
-        }
-        var module_name = ""
-        if url.pathComponents.count > 0 {
-            assert(url.pathComponents.count == 2, "❌❌❌❌❌❌ 请检查这个协议\(url)的moduleName设置是否正确")
-            var names = url.pathComponents
-            names.remove(at: 0)
-            module_name = names.first ?? ""
-        }
-        let selectorName = url.host ?? ""
-        var module_params: [String: Any] = [:]
-        if ((url.query) != nil) {
-            for pair in url.query!.components(separatedBy: "&") {
-                let key = pair.components(separatedBy: "=")[0]
-                let value = pair
-                    .components(separatedBy:"=")[1]
-                    .replacingOccurrences(of: "+", with: " ")
-                    .removingPercentEncoding ?? ""
-                module_params[key] = value
-            }
-        }
-        self.invokeWithModuleName(module_name, selectorName: selectorName, params: module_params)
+        let url = ModuleURL.init(url: url)
+        self.invokeWithModuleName(url.module_name, selectorName: url.module_method, params: url.module_params)
     }
     
     ///  通过url调用
@@ -112,29 +91,8 @@ public class Module: NSObject {
     ///   - url: 协议  scheme://selectorName/moduleName?params   ->  scheme://open/myWallet?code=1111
     @objc public func invokeWithUrlCallback(_ url: String,
                                             callback: @escaping @convention(block) ([String: Any]) -> Void){
-        guard let url = URL.init(string: url) else {
-            return
-        }
-        var module_name = ""
-        if url.pathComponents.count > 0 {
-            assert(url.pathComponents.count == 2, "❌❌❌❌❌❌ 请检查这个协议\(url)的moduleName设置是否正确")
-            var names = url.pathComponents
-            names.remove(at: 0)
-            module_name = names.first ?? ""
-        }
-        let selectorName = url.host ?? ""
-        var module_params: [String: Any] = [:]
-        if ((url.query) != nil) {
-            for pair in url.query!.components(separatedBy: "&") {
-                let key = pair.components(separatedBy: "=")[0]
-                let value = pair
-                    .components(separatedBy:"=")[1]
-                    .replacingOccurrences(of: "+", with: " ")
-                    .removingPercentEncoding ?? ""
-                module_params[key] = value
-            }
-        }
-        self.invokeWithModuleNameCallback(module_name, selectorName: selectorName, params: module_params, callback: callback)
+        let url = ModuleURL.init(url: url)
+        self.invokeWithModuleNameCallback(url.module_name, selectorName: url.module_method, params: url.module_params, callback: callback)
     }
 }
 

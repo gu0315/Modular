@@ -41,7 +41,7 @@ public class ModuleMethod: NSObject {
     
     // 执行方法
     @objc public func performCallbackWithParams(params: Any? = nil,
-                                        callback: @escaping @convention(block) ([String: Any]) -> Void) {
+                                              callback: @escaping @convention(block) ([String: Any]) -> Void) {
         let cls: AnyClass = self.module!.moduleClass
         guard let objcet = cls as? NSObject.Type else { return }
         guard let sel = self.methodSelector else { return }
