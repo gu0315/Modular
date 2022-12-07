@@ -39,7 +39,6 @@ public class ModuleDescription: NSObject {
         if (self.methodClosure == nil) {
             self.methodClosure = { methodDescriptionClosure in
                 let moduleMethod = ModuleMethod()
-                moduleMethod.module = self
                 methodDescriptionClosure(moduleMethod)
                 self.moduleMethods[moduleMethod.methodName ?? ""] = moduleMethod
                 return self
@@ -60,7 +59,6 @@ public class ModuleDescription: NSObject {
     @discardableResult
     @objc public func method(methodDescriptionClosure:(ModuleMethod)->())-> ModuleDescription {
         let moduleMethod = ModuleMethod()
-        moduleMethod.module = self
         methodDescriptionClosure(moduleMethod)
         self.moduleMethods[moduleMethod.methodName ?? ""] = moduleMethod
         return self

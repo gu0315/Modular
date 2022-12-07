@@ -13,7 +13,6 @@ public class Module: NSObject {
     
     static var moduleCache: Dictionary<String, ModuleDescription> = [:]
     
-    
     private override init() {
         super.init()
         self.cacheModuleProtocolClasses()
@@ -64,32 +63,31 @@ public class Module: NSObject {
     ///   - params:  模块参数
     ///   - callback: 模块回调
     @objc public func invokeWithModuleName(_ moduleName: String,
-                                 selectorName: String,
-                                 params: [String: Any]? = nil,
-                                 callback:(@convention(block) ([String: Any]) -> Void)?){
+                                           selectorName: String,
+                                                 params: [String: Any]? = nil,
+                                               callback: (@convention(block) ([String: Any]) -> Void)?){
         let moduleDescription = Module.moduleCache[moduleName]
         let method = moduleDescription?.moduleMethods[selectorName]
         if ((method) != nil) {
-            let cls: AnyClass = method!.module!.moduleClass
+            let cls: AnyClass = moduleDescription!.moduleClass
             guard let objcet = cls as? NSObject.Type else { return }
             guard let sel = method!.methodSelector else { return }
             if (callback != nil) {
                 if (method!.isClassMethod) {
-                    // 类方法调用
                     objcet.perform(sel, with: params, with: callback)
                 } else {
-                    // 实列方法调用
                     objcet.init().perform(sel, with: params, with: callback)
                 }
             } else {
                 if (method!.isClassMethod) {
-                    // 类方法调用
                     objcet.perform(sel, with: params)
                 } else {
-                    // 实列方法调用
                     objcet.init().perform(sel, with: params)
                 }
             }
+        } else {
+            // TODO 404
+            print("未找到模块方法-----404")
         }
     }
 }

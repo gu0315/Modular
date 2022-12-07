@@ -63,7 +63,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 "str": "1"
             ], callback: nil)
         } else if (indexPath.row == 2) {
-            Module.share.invokeWithModuleName("testSwift", selectorName: "alert", params: [
+            Module.share.invokeWithModuleName("testSwift", selectorName: "log", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20

@@ -14,8 +14,6 @@ public class ModuleMethod: NSObject {
     var methodName: String?
     // true表示是类方法，false表示是实例方法，默认false
     var isClassMethod = false
-    // 对所属module的弱引用
-    weak var module: ModuleDescription?
     
     override init() {
         super.init()
