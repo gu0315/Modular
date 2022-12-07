@@ -46,11 +46,19 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
                 method.name("log")
                        .selector(selector: #selector(printLog(logString:)))
             }
+            .method { method in
+                method.name("log")
+                       .selector(selector: #selector(printLog1(logString:)))
+            }
     }
     
     
     @objc func printLog(logString: Dictionary<String, Any>) {
         print(logString)
+    }
+
+    @objc func printLog1(logString: Dictionary<String, Any>) {
+        print("----", logString)
     }
 
 

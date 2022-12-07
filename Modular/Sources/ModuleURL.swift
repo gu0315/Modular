@@ -24,7 +24,7 @@ public class ModuleURL: NSObject {
         assert(URL(string: url) != nil, "❌❌❌❌❌❌ 请检查这个URL\(url)是否正确, 设置不合法")
         let moduleUrl: URL = URL(string: url)!
         self.module_name = moduleName(url: moduleUrl)
-        self.module_method = modulMethod(url: moduleUrl)
+        self.module_method = moduleUrl.host ?? ""
         self.module_params = moduleParams(url: moduleUrl)
     }
     
@@ -33,20 +33,15 @@ public class ModuleURL: NSObject {
     }
     
     func moduleName(url:URL) -> String{
-        var module_name = ""
         if url.pathComponents.count > 0 {
             var names = url.pathComponents
             names.remove(at: 0)
-            module_name = names.first ?? ""
+            return  names.first ?? ""
+        } else {
+            return ""
         }
-        return module_name
     }
-    
-    
-    func modulMethod(url:URL) -> String {
-        return url.host ?? ""
-    }
-    
+
     func moduleParams(url:URL) -> Dictionary<String, Any> {
         var module_params: [String: Any] = [:]
         if ((url.query) != nil) {
