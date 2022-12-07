@@ -46,21 +46,12 @@ public class Module: NSObject {
         Module.moduleCache = tmpCache
     }
 
-
-    
     ///  通过url调用
     /// - Parameters:
     ///   - url: 协议  scheme://selectorName/moduleName?params   ->  scheme://open/myWallet?code=1111
-    @objc public func invokeWithUrl(_ url: String){
-        let url = ModuleURL.init(url: url)
-        self.invokeWithModuleName(url.module_name, selectorName: url.module_method, params: url.module_params, callback: nil)
-    }
-    
-    ///  通过url调用
-    /// - Parameters:
-    ///   - url: 协议  scheme://selectorName/moduleName?params   ->  scheme://open/myWallet?code=1111
-    @objc public func invokeWithUrlCallback(_ url: String,
-                                            callback: (@convention(block) ([String: Any]) -> Void)?){
+    ///   - callback: 模块回调
+    @objc public func invokeWithUrl(_ url: String,
+                                 callback: (@convention(block) ([String: Any]) -> Void)?){
         let url = ModuleURL.init(url: url)
         self.invokeWithModuleName(url.module_name, selectorName: url.module_method, params: url.module_params, callback: callback)
     }

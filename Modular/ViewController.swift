@@ -85,7 +85,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 "str": "1"
             ], callback: nil)
         } else if (indexPath.row == 5) {
-            Module.share.invokeWithUrlCallback("scheme://push/testSwift?code=1111"){ parameters in
+            Module.share.invokeWithUrl("scheme://push/testSwift?code=1111"){ parameters in
                 //页面参数回调
                 print("调用模块方法的回调-》", parameters)
             }

@@ -38,35 +38,4 @@ public class ModuleMethod: NSObject {
         self.isClassMethod = isClassMethod
         return self
     }
-    
-    
-    
-    
-    // 执行方法
-    @objc public func performCallbackWithParams(params: Any? = nil,
-                                              callback: @escaping @convention(block) ([String: Any]) -> Void) {
-        let cls: AnyClass = self.module!.moduleClass
-        guard let objcet = cls as? NSObject.Type else { return }
-        guard let sel = self.methodSelector else { return }
-        if (self.isClassMethod) {
-            // 类方法调用
-            objcet.perform(sel, with: params, with: callback)
-        } else {
-            // 实列方法调用
-            objcet.init().perform(sel, with: params, with: callback)
-        }
-    }
-    
-    @objc public func performWithParams(params: Any? = nil) {
-        let cls: AnyClass = self.module!.moduleClass
-        guard let objcet = cls as? NSObject.Type else { return }
-        guard let sel = self.methodSelector else { return }
-        if (self.isClassMethod) {
-            // 类方法调用
-            objcet.perform(sel, with: params)
-        } else {
-            // 实列方法调用
-            objcet.init().perform(sel, with: params)
-        }
-    }
 }
