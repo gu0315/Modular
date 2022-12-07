@@ -39,6 +39,9 @@ public class ModuleMethod: NSObject {
         return self
     }
     
+    
+    
+    
     // 执行方法
     @objc public func performCallbackWithParams(params: Any? = nil,
                                               callback: @escaping @convention(block) ([String: Any]) -> Void) {

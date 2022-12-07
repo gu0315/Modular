@@ -46,7 +46,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath.row == 0) {
-            Module.share.invokeWithModuleNameCallback("testSwift", selectorName: "push", params: [
+            Module.share.invokeWithModuleName("testSwift", selectorName: "push", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,
@@ -61,15 +61,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 "name": "顾钱想",
                 "sex": 20,
                 "str": "1"
-            ])
+            ], callback: nil)
         } else if (indexPath.row == 2) {
             Module.share.invokeWithModuleName("testSwift", selectorName: "alert", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20
-            ])
+            ], callback: nil)
         } else if (indexPath.row == 3) {
-            Module.share.invokeWithModuleNameCallback("testOC", selectorName: "push", params: [
+            Module.share.invokeWithModuleName("testOC", selectorName: "push", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,
@@ -83,7 +83,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 "name": "顾钱想",
                 "sex": 20,
                 "str": "1"
-            ])
+            ], callback: nil)
         } else if (indexPath.row == 5) {
             Module.share.invokeWithUrlCallback("scheme://push/testSwift?code=1111"){ parameters in
                 //页面参数回调

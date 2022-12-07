@@ -46,53 +46,60 @@ public class Module: NSObject {
         Module.moduleCache = tmpCache
     }
 
-    /// 通过moduleName调用
-    /// - Parameters:
-    ///   - moduleName: 模块名
-    ///   - selectorName: 模块方法
-    ///   - params:  模块参数
-    ///   - callback: 模块回调
-    @objc public func invokeWithModuleNameCallback(_ moduleName: String,
-                                 selectorName: String,
-                                 params: [String: Any]? = nil,
-                                 callback: @escaping @convention(block) ([String: Any]) -> Void) {
-        let moduleDescription = Module.moduleCache[moduleName]
-        let method = moduleDescription?.moduleMethods[selectorName]
-        if ((method) != nil) {
-            method?.performCallbackWithParams(params: params, callback: callback)
-        }
-    }
-    
-    /// 通过moduleName调用
-    /// - Parameters:
-    ///   - moduleName: 模块名
-    ///   - selectorName: 模块方法
-    ///   - params:  模块参数
-    @objc public func invokeWithModuleName(_ moduleName: String,
-                                 selectorName: String,
-                                 params: [String: Any]? = nil){
-        let moduleDescription = Module.moduleCache[moduleName]
-        let method = moduleDescription?.moduleMethods[selectorName]
-        if ((method) != nil) {
-            method?.performWithParams(params: params)
-        }
-    }
+
     
     ///  通过url调用
     /// - Parameters:
     ///   - url: 协议  scheme://selectorName/moduleName?params   ->  scheme://open/myWallet?code=1111
     @objc public func invokeWithUrl(_ url: String){
         let url = ModuleURL.init(url: url)
-        self.invokeWithModuleName(url.module_name, selectorName: url.module_method, params: url.module_params)
+        self.invokeWithModuleName(url.module_name, selectorName: url.module_method, params: url.module_params, callback: nil)
     }
     
     ///  通过url调用
     /// - Parameters:
     ///   - url: 协议  scheme://selectorName/moduleName?params   ->  scheme://open/myWallet?code=1111
     @objc public func invokeWithUrlCallback(_ url: String,
-                                            callback: @escaping @convention(block) ([String: Any]) -> Void){
+                                            callback: (@convention(block) ([String: Any]) -> Void)?){
         let url = ModuleURL.init(url: url)
-        self.invokeWithModuleNameCallback(url.module_name, selectorName: url.module_method, params: url.module_params, callback: callback)
+        self.invokeWithModuleName(url.module_name, selectorName: url.module_method, params: url.module_params, callback: callback)
+    }
+    
+    
+    /// 通过moduleName调用
+    /// - Parameters:
+    ///   - moduleName: 模块名
+    ///   - selectorName: 模块方法
+    ///   - params:  模块参数
+    ///   - callback: 模块回调
+    @objc public func invokeWithModuleName(_ moduleName: String,
+                                 selectorName: String,
+                                 params: [String: Any]? = nil,
+                                 callback:(@convention(block) ([String: Any]) -> Void)?){
+        let moduleDescription = Module.moduleCache[moduleName]
+        let method = moduleDescription?.moduleMethods[selectorName]
+        if ((method) != nil) {
+            let cls: AnyClass = method!.module!.moduleClass
+            guard let objcet = cls as? NSObject.Type else { return }
+            guard let sel = method!.methodSelector else { return }
+            if (callback != nil) {
+                if (method!.isClassMethod) {
+                    // 类方法调用
+                    objcet.perform(sel, with: params, with: callback)
+                } else {
+                    // 实列方法调用
+                    objcet.init().perform(sel, with: params, with: callback)
+                }
+            } else {
+                if (method!.isClassMethod) {
+                    // 类方法调用
+                    objcet.perform(sel, with: params)
+                } else {
+                    // 实列方法调用
+                    objcet.init().perform(sel, with: params)
+                }
+            }
+        }
     }
 }
 
