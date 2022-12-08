@@ -17,7 +17,7 @@ public protocol ModuleProtocol: NSObjectProtocol {
 public class ModuleDescription: NSObject {
     // 实现协议的类做绑定
     var moduleClass: AnyClass
-    // 模块名称, 默认为空
+    // 模块名称
     var moduleName: String = ""
     // 模块关联的方法
     var moduleMethods: Dictionary<String, ModuleMethod> = [:]

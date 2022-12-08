@@ -58,7 +58,6 @@ public class Module: NSObject {
         self.invoke(moduleName: module_name, selectorName: module_method, params: url.module_params, callback: callback, isUrl: true)
     }
     
-    
     /// 通过moduleName调用
     /// - Parameters:
     ///   - moduleName: 模块名
@@ -96,7 +95,6 @@ public class Module: NSObject {
             }
         }
     }
-    
     
     /// RN 使用，动态注册模块描述, 优先级较高，可以覆盖原来的模块描述
     /// - Parameter modules: 模块描述数组
