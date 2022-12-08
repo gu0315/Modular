@@ -90,6 +90,17 @@ public class Module: NSObject {
             print("未找到模块方法-----404")
         }
     }
+    
+    
+    /// RN 使用，动态注册模块描述, 优先级较高，可以覆盖原来的模块描述
+    /// - Parameter modules: 模块描述数组
+    @objc public func registerModules(modules: Array<ModuleDescription>) {
+        var tmpCache: Dictionary<String, ModuleDescription> = Module.moduleCache
+        for (_, moduleDes) in modules.enumerated() {
+            tmpCache[moduleDes.moduleName] = moduleDes
+        }
+        Module.moduleCache = tmpCache
+    }
 }
 
 
