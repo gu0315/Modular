@@ -49,10 +49,13 @@ public class Module: NSObject {
     /// - Parameters:
     ///   - url: 协议  scheme://selectorName/moduleName?params   ->  scheme://open/myWallet?code=1111
     ///   - callback: 模块回调
-    @objc public func invokeWithUrl(_ url: String,
-                                 callback: (@convention(block) ([String: Any]) -> Void)?){
+    @objc public func invoke(url: String,
+                        callback: (@convention(block) ([String: Any]) -> Void)?){
         let url = ModuleURL.init(url: url)
-        self.invokeWithModuleName(url.module_name, selectorName: url.module_method, params: url.module_params, callback: callback)
+        guard let module_name = url.module_name, let module_method = url.module_method else {
+            return
+        }
+        self.invoke(moduleName: module_name, selectorName: module_method, params: url.module_params, callback: callback, isUrl: true)
     }
     
     
@@ -62,10 +65,11 @@ public class Module: NSObject {
     ///   - selectorName: 模块方法
     ///   - params:  模块参数
     ///   - callback: 模块回调
-    @objc public func invokeWithModuleName(_ moduleName: String,
-                                           selectorName: String,
-                                                 params: [String: Any]? = nil,
-                                               callback: (@convention(block) ([String: Any]) -> Void)?){
+    @objc public func invoke(moduleName: String,
+                           selectorName: String,
+                                 params: [String: Any]? = nil,
+                               callback: (@convention(block) ([String: Any]) -> Void)?,
+                                  isUrl:Bool=false){
         let moduleDescription = Module.moduleCache[moduleName]
         let method = moduleDescription?.moduleMethods[selectorName]
         if ((method) != nil) {
@@ -86,8 +90,10 @@ public class Module: NSObject {
                 }
             }
         } else {
-            // TODO 404
-            print("未找到模块方法-----404")
+            // TODO 只有通过URL调用才会到404
+            if (isUrl) {
+                print("未找到模块方法-----404")
+            }
         }
     }
     

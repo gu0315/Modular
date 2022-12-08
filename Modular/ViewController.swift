@@ -46,7 +46,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath.row == 0) {
-            Module.share.invokeWithModuleName("testSwift", selectorName: "push", params: [
+            Module.share.invoke(moduleName:"testSwift", selectorName: "push", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,
@@ -56,20 +56,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 print("调用模块方法的回调-》", parameters)
             }
         } else if (indexPath.row == 1) {
-            Module.share.invokeWithModuleName("testSwift", selectorName: "present", params: [
+            Module.share.invoke(moduleName:"testSwift", selectorName: "present", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,
                 "str": "1"
             ], callback: nil)
         } else if (indexPath.row == 2) {
-            Module.share.invokeWithModuleName("testSwift", selectorName: "log", params: [
+            Module.share.invoke(moduleName:"testSwift", selectorName: "log", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20
             ], callback: nil)
         } else if (indexPath.row == 3) {
-            Module.share.invokeWithModuleName("testOC", selectorName: "push", params: [
+            Module.share.invoke(moduleName:"testOC", selectorName: "push", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,
@@ -78,14 +78,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 print("调用模块方法的回调-》", parameters)
             }
         } else if (indexPath.row == 4) {
-            Module.share.invokeWithModuleName("testOC", selectorName: "present", params: [
+            Module.share.invoke(moduleName:"testOC", selectorName: "present", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,
                 "str": "1"
             ], callback: nil)
         } else if (indexPath.row == 5) {
-            Module.share.invokeWithUrl("scheme://push/testSwift?code=1111"){ parameters in
+            Module.share.invoke(url:"scheme://push/testSwift?code=1111"){ parameters in
                 //页面参数回调
                 print("调用模块方法的回调-》", parameters)
             }

@@ -10,10 +10,10 @@ import UIKit
 public class ModuleURL: NSObject {
 
     //URL中的模块名
-    @objc public var module_name: String = ""
+    @objc public var module_name: String?
 
     //URL中的模块方法
-    @objc public var module_method: String = ""
+    @objc public var module_method: String?
 
     //URL中的参数
     @objc public var module_params: Dictionary<String, Any> = [:]
