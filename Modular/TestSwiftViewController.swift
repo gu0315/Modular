@@ -48,7 +48,7 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
             }
             .method { method in
                 method.name("log")
-                       .selector(selector: #selector(printLog1(logString:)))
+                       .selector(selector: #selector(printLog1(dic:)))
             }
     }
     
@@ -57,8 +57,17 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
         print(logString)
     }
 
-    @objc func printLog1(logString: Dictionary<String, Any>) {
-        print("----", logString)
+    @objc func printLog1(dic: Dictionary<String, Any>) {
+        let data = try? JSONSerialization.data(withJSONObject: dic, options: JSONSerialization.WritingOptions.init(rawValue: 0))
+        let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+        let alert = UIAlertController(title: "", message: jsonStr as String? ?? "", preferredStyle: .alert)
+        alert.addAction(UIAlertAction.init(title: "知道了", style:.default, handler: { _ in
+
+        }))
+        guard let topVc = TestSwiftViewController.applicationTopVC() else {
+            return
+        }
+        topVc.present(alert, animated: true)
     }
 
 

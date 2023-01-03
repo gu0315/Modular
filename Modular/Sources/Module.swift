@@ -50,7 +50,7 @@ public class Module: NSObject {
     ///   - url: 协议  scheme://selectorName/moduleName?params   ->  scheme://open/myWallet?code=1111
     ///   - callback: 模块回调
     @objc public func invoke(url: String,
-                        callback: (@convention(block) ([String: Any]) -> Void)?){
+                        callback:(@convention(block) ([String: Any]) -> Void)?){
         let url = ModuleURL.init(url: url)
         guard let module_name = url.module_name, let module_method = url.module_method else {
             return
@@ -68,25 +68,17 @@ public class Module: NSObject {
                            selectorName: String,
                                  params: [String: Any]? = nil,
                                callback: (@convention(block) ([String: Any]) -> Void)?,
-                                  isUrl:Bool=false){
+                                  isUrl: Bool = false){
         let moduleDescription = Module.moduleCache[moduleName]
         let method = moduleDescription?.moduleMethods[selectorName]
         if ((method) != nil) {
             let cls: AnyClass = moduleDescription!.moduleClass
             guard let objcet = cls as? NSObject.Type else { return }
             guard let sel = method!.methodSelector else { return }
-            if (callback != nil) {
-                if (method!.isClassMethod) {
-                    objcet.perform(sel, with: params, with: callback)
-                } else {
-                    objcet.init().perform(sel, with: params, with: callback)
-                }
+            if (method!.isClassMethod) {
+                objcet.perform(sel, with: params, with: callback ?? nil)
             } else {
-                if (method!.isClassMethod) {
-                    objcet.perform(sel, with: params)
-                } else {
-                    objcet.init().perform(sel, with: params)
-                }
+                objcet.init().perform(sel, with: params, with: callback ?? nil)
             }
         } else {
             // TODO 只有通过URL调用才会到404
