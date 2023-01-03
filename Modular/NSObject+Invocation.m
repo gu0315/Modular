@@ -49,8 +49,4 @@
     }
     return returnOb;
 }
-
-- (BOOL)isSwift{
-    return [NSStringFromClass([self class]) componentsSeparatedByString:@"."].count > 1;
-}
 @end
