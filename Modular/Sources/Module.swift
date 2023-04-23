@@ -97,6 +97,9 @@ public class Module: NSObject {
         }
         Module.moduleCache = tmpCache
     }
+    
+    /// TODO Invocation调用
+    /// 通过func perform(_ aSelector: Selector!, with object1: Any!, with object2: Any!) -> Unmanaged<AnyObject>! 最多只能传两个参数
 }
 
 

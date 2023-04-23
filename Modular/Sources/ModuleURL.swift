@@ -8,6 +8,9 @@
 import UIKit
 //eg: scheme://module/page?param0=xxx&param1=xxx
 public class ModuleURL: NSObject {
+    
+    //URL中的Scheme
+    @objc public var module_scheme: String?
 
     //URL中的模块名
     @objc public var module_name: String?
@@ -23,8 +26,9 @@ public class ModuleURL: NSObject {
         // 验证合法性
         assert(URL(string: url) != nil, "❌❌❌❌❌❌ 请检查这个URL\(url)是否正确, 设置不合法")
         let moduleUrl: URL = URL(string: url)!
+        self.module_scheme = moduleUrl.scheme
         self.module_name = moduleName(url: moduleUrl)
-        self.module_method = moduleUrl.host ?? ""
+        self.module_method = moduleUrl.host
         self.module_params = moduleParams(url: moduleUrl)
     }
     
@@ -32,7 +36,8 @@ public class ModuleURL: NSObject {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func moduleName(url:URL) -> String{
+    
+    func moduleName(url:URL) -> String {
         if url.pathComponents.count > 0 {
             var names = url.pathComponents
             names.remove(at: 0)
