@@ -78,12 +78,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 print("调用模块方法的回调-》", parameters)
             }
         } else if (indexPath.row == 4) {
-            Module.share.invoke(moduleName:"testOC", selectorName: "present", params: [
+            // 调用多参数
+            Module.share.invokeWithModuleName(moduleName: "testOC", selectorName: "multiparameterLog", params: [
                 "id": "1",
                 "name": "顾钱想",
-                "sex": 20,
-                "str": "1"
-            ], callback: nil)
+                "sex": 20
+            ]) { parameters in
+                print("调用多参数", parameters as Any)
+            }
         } else if (indexPath.row == 5) {
             Module.share.invoke(url:"scheme://push/testSwift?code=1111"){ parameters in
                 //页面参数回调

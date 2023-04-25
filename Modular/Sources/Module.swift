@@ -99,7 +99,27 @@ public class Module: NSObject {
     }
     
     /// TODO Invocation调用
-    /// 通过func perform(_ aSelector: Selector!, with object1: Any!, with object2: Any!) -> Unmanaged<AnyObject>! 最多只能传两个参数
+    /// 通过func perform(_ aSelector: Selector!, with object1: Any!, with object2: Any!) -> Unmanaged<AnyObject>! 最多只能传两个参数, 可以用Invocation传多个参数
+    @objc public func invokeWithModuleName(moduleName: String,
+                                         selectorName: String,
+                                               params: [String: Any],
+                               callback: (@convention(block) ([AnyHashable: Any]?) -> Void)?) {
+        let moduleDescription = Module.moduleCache[moduleName]
+        let method = moduleDescription?.moduleMethods[selectorName]
+        if (moduleDescription == nil || method == nil) {
+            return
+        }
+        let cls: AnyClass = moduleDescription!.moduleClass
+        guard let objcet = cls as? NSObject.Type else { return }
+        guard let sel = method!.methodSelector else { return }
+        let args = Array(params.values)
+        // TODO 添加参数检验
+        invocation(with: objcet, sel: sel, isClassMethod: method!.isClassMethod, args: args) { dic in
+            if ((callback) != nil) {
+                callback!(dic)
+            }
+        }
+    }
 }
 
 

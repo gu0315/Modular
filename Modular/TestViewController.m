@@ -61,6 +61,12 @@
     [topVc presentViewController:vc animated:YES completion:nil];
 }
 
+- (void)multiparameterLog:(NSDictionary *)dic parameter1:(NSString *)parameter1 parameter2:(NSString *)parameter2 {
+    NSLog(@"%@---%@---%@", dic, parameter1, parameter2);
+}
+
+
+
 + (void)moduleDescriptionWithDescription:(ModuleDescription * _Nonnull)description {
     description.moduleNameClosure(@"testOC")
         .methodClosure(^(ModuleMethod * moduleMethod) {
@@ -71,6 +77,11 @@
             [moduleMethod selectorWithSelector: @selector(present:)];
             [moduleMethod name:@"present"];
             [moduleMethod isClassMethod:YES];
+        })
+        // 多参数
+        .methodClosure(^(ModuleMethod * moduleMethod) {
+            [moduleMethod selectorWithSelector: @selector(multiparameterLog:parameter1:parameter2:)];
+            [moduleMethod name:@"multiparameterLog"];
         });
 }
 
