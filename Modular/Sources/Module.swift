@@ -112,9 +112,8 @@ public class Module: NSObject {
         let cls: AnyClass = moduleDescription!.moduleClass
         guard let objcet = cls as? NSObject.Type else { return }
         guard let sel = method!.methodSelector else { return }
-        let args = Array(params.values)
         // TODO 添加参数检验
-        invocation(with: objcet, sel: sel, isClassMethod: method!.isClassMethod, args: args) { dic in
+        invocation(with: objcet, sel: sel, isClassMethod: method!.isClassMethod, params: params) { dic in
             if ((callback) != nil) {
                 callback!(dic)
             }

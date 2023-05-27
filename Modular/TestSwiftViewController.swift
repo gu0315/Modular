@@ -69,8 +69,6 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
         }
         topVc.present(alert, animated: true)
     }
-
-
     
     @objc class func push(dic: Dictionary<String, Any> = [:], callback: ([String: Any]) -> Void) {
         let vc = TestSwiftViewController()
@@ -93,5 +91,10 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
             return
         }
         topVc.present(vc, animated: true, completion: {})
+    }
+    
+    // 范形类型约束
+    func testNorm<T: TestModel>(value: T) {
+        
     }
 }
