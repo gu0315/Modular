@@ -25,7 +25,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                       "present界面(Swift模块)",
                       "组件调用Objc（Swift模块）",
                       "push界面(OC模块)",
-                      "present界面(OC模块)",
+                      "调用多参数(OC模块)",
                       "Url调用",
                       "Invocation多参数调用"]
     
@@ -47,7 +47,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath.row == 0) {
-            Module.share.invoke(moduleName:"testSwift", selectorName: "push", params: [
+            Module.share.performWithModuleName(moduleName:"testSwift", selectorName: "push", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,
@@ -57,20 +57,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 print("调用模块方法的回调-》", parameters)
             }
         } else if (indexPath.row == 1) {
-            Module.share.invoke(moduleName:"testSwift", selectorName: "present", params: [
+            Module.share.performWithModuleName(moduleName:"testSwift", selectorName: "present", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,
                 "str": "1"
             ], callback: nil)
         } else if (indexPath.row == 2) {
-            Module.share.invoke(moduleName:"testSwift", selectorName: "testNorm", params: [
+            Module.share.performWithModuleName(moduleName:"testSwift", selectorName: "testNorm", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20
             ], callback: nil)
         } else if (indexPath.row == 3) {
-            Module.share.invoke(moduleName:"testOC", selectorName: "push", params: [
+            Module.share.performWithModuleName(moduleName:"testOC", selectorName: "push", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20,
@@ -80,25 +80,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
         } else if (indexPath.row == 4) {
             // 调用多参数
-            Module.share.invokeWithModuleName(moduleName: "testOC", selectorName: "multiparameterLog", params: [
-                "id": "1",
-                "name": "顾钱想",
-                "sex": 20
+            Module.share.performWithModuleName(moduleName: "testOC", selectorName: "multiparameterLog", params: [
+                "dic": ["key": "value"],
+                "parameter1": "顾钱想",
+                "parameter2": 20
             ]) { parameters in
                 print("调用多参数", parameters as Any)
             }
         } else if (indexPath.row == 5) {
-            Module.share.invoke(url:"scheme://push/testSwift?code=1111"){ parameters in
+            Module.share.performWithUrl(url:"scheme://push/testSwift?code=1111"){ parameters in
                 //页面参数回调
                 print("调用模块方法的回调-》", parameters)
             }
         } else if (indexPath.row == 6) {
-            Module.share.invoke(moduleName:"testSwift", selectorName: "multiparameter", params: [
-                "params1": "1",
-                "params2": ["1"],
-                "params3": ["key": "value"],
-                "params4": 20
-            ], callback: nil)
+//            Module.share.performWithModuleName(moduleName:"testSwift", selectorName: "multiparameter", params: [
+//                "params1": "1",
+//                "params2": ["1"],
+//                "params3": ["key": "value"],
+//                "params4": 20
+//            ], callback: nil)
         }
     }
 }

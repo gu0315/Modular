@@ -49,13 +49,13 @@ public class Module: NSObject {
     /// - Parameters:
     ///   - url: 协议  scheme://selectorName/moduleName?params   ->  scheme://open/myWallet?code=1111
     ///   - callback: 模块回调
-    @objc public func invoke(url: String,
-                        callback:(@convention(block) ([String: Any]) -> Void)?){
+    @objc public func performWithUrl(url: String,
+                                callback:(@convention(block) ([AnyHashable: Any]) -> Void)?){
         let url = ModuleURL.init(url: url)
         guard let module_name = url.module_name, let module_method = url.module_method else {
             return
         }
-        self.invoke(moduleName: module_name, selectorName: module_method, params: url.module_params, callback: callback, isUrl: true)
+        self.performWithModuleName(moduleName: module_name, selectorName: module_method, params: url.module_params, callback: callback, isUrl: true)
     }
     
     /// 通过moduleName调用
@@ -64,11 +64,11 @@ public class Module: NSObject {
     ///   - selectorName: 模块方法
     ///   - params:  模块参数
     ///   - callback: 模块回调
-    @objc public func invoke(moduleName: String,
-                           selectorName: String,
-                                 params: Any,
-                               callback: (@convention(block) ([String: Any]) -> Void)?,
-                                  isUrl: Bool = false){
+    @objc public func performWithModuleName(moduleName: String,
+                                          selectorName: String,
+                                                params: [String: Any],
+                                              callback: (@convention(block) ([AnyHashable: Any]) -> Void)?,
+                                                 isUrl: Bool = false){
         let moduleDescription = Module.moduleCache[moduleName]
         let moduleMethod = moduleDescription?.moduleMethods[selectorName]
         if ((moduleMethod) != nil) {
@@ -82,6 +82,7 @@ public class Module: NSObject {
                     let argumentsCount = method_getNumberOfArguments(ivar_Method!)
                     if (argumentsCount - 2 > 2) {
                         print("参数大于2")
+                        invocationWithClass(cls: cls, sel: sel, isClassMethod: moduleMethod!.isClassMethod, params: params, callback: callback)
                         return
                     }
                 }
@@ -92,6 +93,7 @@ public class Module: NSObject {
                     let argumentsCount = method_getNumberOfArguments(ivar_Method!)
                     if (argumentsCount - 2 > 2) {
                         print("参数大于2")
+                        invocationWithClass(cls: cls, sel: sel, isClassMethod: moduleMethod!.isClassMethod, params: params, callback: callback)
                         return
                     }
                 }
@@ -100,7 +102,7 @@ public class Module: NSObject {
                 _class.perform(sel, with: params, with: callback ?? nil)
             }
         } else {
-            // TODO 只有通过URL调用才会到404
+            // TODO 自定义404页面
             if (isUrl) {
                 print("未找到模块方法-----404")
             }
@@ -117,24 +119,16 @@ public class Module: NSObject {
         Module.moduleCache = tmpCache
     }
     
-    /// TODO Invocation调用
+    /// Invocation调用
     /// 通过func perform(_ aSelector: Selector!, with object1: Any!, with object2: Any!) -> Unmanaged<AnyObject>! 最多只能传两个参数, 可以用Invocation传多个参数
-    @objc public func invokeWithModuleName(moduleName: String,
-                                         selectorName: String,
-                                               params: [String: Any],
-                               callback: (@convention(block) ([AnyHashable: Any]?) -> Void)?) {
-        let moduleDescription = Module.moduleCache[moduleName]
-        let method = moduleDescription?.moduleMethods[selectorName]
-        if (moduleDescription == nil || method == nil) {
-            return
-        }
-        let cls: AnyClass = moduleDescription!.moduleClass
-        guard let objcet = cls as? NSObject.Type else { return }
-        guard let sel = method!.methodSelector else { return }
-        // TODO 添加参数检验
-        invocation(with: objcet, sel: sel, isClassMethod: method!.isClassMethod, params: params) { dic in
+    @objc public func invocationWithClass(cls: AnyClass,
+                                          sel: Selector,
+                                isClassMethod: Bool,
+                                       params: [String: Any],
+                               callback: (@convention(block) ([AnyHashable: Any]) -> Void)?) {
+        invocation(with: cls, sel: sel, isClassMethod: isClassMethod, params: params) { dic in
             if ((callback) != nil) {
-                callback!(dic)
+                callback!(dic ?? [:])
             }
         }
     }

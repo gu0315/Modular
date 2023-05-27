@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func handleOpenUrl(_ url: URL, _ application: UIApplication? = nil) -> Bool {
-        Module.share.invoke(url: url.absoluteString, callback: nil)
+        Module.share.performWithUrl(url: url.absoluteString, callback: nil)
         return true
     }
 }

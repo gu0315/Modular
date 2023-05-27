@@ -61,8 +61,8 @@
     [topVc presentViewController:vc animated:YES completion:nil];
 }
 
-- (void)multiparameterLog:(NSDictionary *)dic parameter1:(NSString *)parameter1 parameter2:(NSString *)parameter2 {
-    NSLog(@"%@---%@---%@", dic, parameter1, parameter2);
+- (void)multiparameterLog:(NSDictionary *)dic parameter1:(NSString *)parameter1 parameter2:(int)parameter2 {
+    NSLog(@"dic==%@\nparameter1==%@\nparameter2==%d", dic, parameter1, parameter2);
 }
 
 

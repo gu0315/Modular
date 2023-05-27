@@ -24,7 +24,7 @@ public class ModuleURL: NSObject {
     init(url: String) {
         super.init()
         // 验证合法性
-        assert(URL(string: url) != nil, "❌❌❌❌❌❌ 请检查这个URL\(url)是否正确, 设置不合法")
+        assert(URL(string: url) != nil, "请检查这个URL\(url)是否正确, 设置不合法")
         let moduleUrl: URL = URL(string: url)!
         self.module_scheme = moduleUrl.scheme
         self.module_name = moduleName(url: moduleUrl)
