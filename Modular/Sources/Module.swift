@@ -35,9 +35,9 @@ public class Module: NSObject {
                     moduleDes = ModuleDescription.init(moduleClass: cls)
                     cls.moduleDescription?(description: moduleDes)
                     // 实现了moduleDescription协议未设置moduleName
-                    assert(!moduleDes.moduleName.isEmpty, "❌❌❌❌❌❌ in \(String(cString: class_getName(cls))), moduleName is undefined, please check!")
+                    assert(!moduleDes.moduleName.isEmpty, "in \(String(cString: class_getName(cls))), moduleName is undefined, please check!")
                     // 重复设置了模块名
-                    assert((tmpCache[moduleDes.moduleName] == nil), "❌❌❌❌❌❌ in \(String(cString: class_getName(cls))), module \(moduleDes.moduleName) has defined, please check!")
+                    assert((tmpCache[moduleDes.moduleName] == nil), "in \(String(cString: class_getName(cls))), module \(moduleDes.moduleName) has defined, please check!")
                     tmpCache[moduleDes.moduleName] = moduleDes
                 }
             }
@@ -66,19 +66,38 @@ public class Module: NSObject {
     ///   - callback: 模块回调
     @objc public func invoke(moduleName: String,
                            selectorName: String,
-                                 params: [String: Any]? = nil,
+                                 params: Any,
                                callback: (@convention(block) ([String: Any]) -> Void)?,
                                   isUrl: Bool = false){
         let moduleDescription = Module.moduleCache[moduleName]
-        let method = moduleDescription?.moduleMethods[selectorName]
-        if ((method) != nil) {
+        let moduleMethod = moduleDescription?.moduleMethods[selectorName]
+        if ((moduleMethod) != nil) {
             let cls: AnyClass = moduleDescription!.moduleClass
-            guard let objcet = cls as? NSObject.Type else { return }
-            guard let sel = method!.methodSelector else { return }
-            if (method!.isClassMethod) {
-                objcet.perform(sel, with: params, with: callback ?? nil)
+            guard let obj = cls as? NSObject.Type else { return }
+            guard let sel = moduleMethod!.methodSelector else { return }
+            if (moduleMethod!.isClassMethod) {
+                guard obj.responds(to: sel) else { return }
+                let ivar_Method = class_getClassMethod(cls, sel)
+                if ((ivar_Method) != nil) {
+                    let argumentsCount = method_getNumberOfArguments(ivar_Method!)
+                    if (argumentsCount - 2 > 2) {
+                        print("参数大于2")
+                        return
+                    }
+                }
+                obj.perform(sel, with: params, with: callback ?? nil)
             } else {
-                objcet.init().perform(sel, with: params, with: callback ?? nil)
+                let ivar_Method = class_getInstanceMethod(cls, sel)
+                if ((ivar_Method) != nil) {
+                    let argumentsCount = method_getNumberOfArguments(ivar_Method!)
+                    if (argumentsCount - 2 > 2) {
+                        print("参数大于2")
+                        return
+                    }
+                }
+                let _class = obj.init()
+                guard _class.responds(to: sel) else { return }
+                _class.perform(sel, with: params, with: callback ?? nil)
             }
         } else {
             // TODO 只有通过URL调用才会到404
@@ -120,5 +139,4 @@ public class Module: NSObject {
         }
     }
 }
-
 

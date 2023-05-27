@@ -40,24 +40,28 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
             }
             .method { method in
                 method.name("present")
-                      .selector(selector: #selector(present(dic:)))
+                    .selector(selector: #selector(present(dic:callback:)))
             }
             .method { method in
                 method.name("log")
-                       .selector(selector: #selector(printLog(logString:)))
+                    .selector(selector: #selector(printLog(logString:callback:)))
             }
             .method { method in
-                method.name("log")
-                       .selector(selector: #selector(printLog1(dic:)))
+                method.name("testNorm")
+                    .selector(selector: #selector(testNorm(value:callback:)))
+            }
+            .method { method in
+                method.name("multiparameter")
+                    .selector(selector: #selector(multiparams(params1: params2: params3: params4: callback:)))
             }
     }
     
     
-    @objc func printLog(logString: Dictionary<String, Any>) {
+    @objc func printLog(logString: Dictionary<String, Any>, callback: ([String: Any]) -> Void) {
         print(logString)
     }
 
-    @objc func printLog1(dic: Dictionary<String, Any>) {
+    @objc func printLog1(dic: Dictionary<String, Any>, callback: ([String: Any]) -> Void) {
         let data = try? JSONSerialization.data(withJSONObject: dic, options: JSONSerialization.WritingOptions.init(rawValue: 0))
         let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
         let alert = UIAlertController(title: "", message: jsonStr as String? ?? "", preferredStyle: .alert)
@@ -82,7 +86,7 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
         topVc.navigationController?.pushViewController(vc, animated: true)
     }
     
-    @objc func present(dic: Dictionary<String, Any> = [:]) {
+    @objc func present(dic: Dictionary<String, Any> = [:], callback: ([String: Any]) -> Void) {
         let vc = TestSwiftViewController()
         let data = try? JSONSerialization.data(withJSONObject: dic, options: JSONSerialization.WritingOptions.init(rawValue: 0))
         let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
@@ -93,8 +97,16 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
         topVc.present(vc, animated: true, completion: {})
     }
     
-    // 范形类型约束
-    func testNorm<T: TestModel>(value: T) {
-        
+    @objc func testNorm(value: TestModel, callback: ([String: Any]) -> Void) {
+        guard value.isKind(of: TestModel.self) else {
+            print("参数有误")
+            return
+        }
     }
+    
+    /// 多参数吊用
+    @objc func multiparams(params1: String, params2: Array<String>, params3: Dictionary<String, Any> = [:], params4: Int , callback: ([String: Any]) -> Void) {
+        print("多参数", params1, params2, params3, params4)
+    }
+    
 }

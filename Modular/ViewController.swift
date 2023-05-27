@@ -26,7 +26,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                       "组件调用Objc（Swift模块）",
                       "push界面(OC模块)",
                       "present界面(OC模块)",
-                      "Url调用"]
+                      "Url调用",
+                      "Invocation多参数调用"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,7 +64,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 "str": "1"
             ], callback: nil)
         } else if (indexPath.row == 2) {
-            Module.share.invoke(moduleName:"testSwift", selectorName: "log", params: [
+            Module.share.invoke(moduleName:"testSwift", selectorName: "testNorm", params: [
                 "id": "1",
                 "name": "顾钱想",
                 "sex": 20
@@ -91,6 +92,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 //页面参数回调
                 print("调用模块方法的回调-》", parameters)
             }
+        } else if (indexPath.row == 6) {
+            Module.share.invoke(moduleName:"testSwift", selectorName: "multiparameter", params: [
+                "params1": "1",
+                "params2": ["1"],
+                "params3": ["key": "value"],
+                "params4": 20
+            ], callback: nil)
         }
     }
 }

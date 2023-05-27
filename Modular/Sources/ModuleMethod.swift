@@ -9,7 +9,7 @@ import UIKit
 
 public class ModuleMethod: NSObject {
     // 模块方法对应的selector
-    var methodSelector: Selector?
+    @objc var methodSelector: Selector?
     // 模块方法对应的别名
     var methodName: String?
     // true表示是类方法，false表示是实例方法，默认false
@@ -37,3 +37,4 @@ public class ModuleMethod: NSObject {
         return self
     }
 }
+
