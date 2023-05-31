@@ -34,25 +34,25 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
     static func moduleDescription(description: ModuleDescription) {
         description.moduleName("testSwift")
             .method { method in
-                method.isClassMethod(true)
-                method.name("push")
-                    .selector(selector: #selector(push(dic:callback:)))
+                method.setIsClassMethod(true)
+                      .setName("push")
+                      .setSelector(selector: #selector(push(dic:callback:)))
             }
             .method { method in
-                method.name("present")
-                    .selector(selector: #selector(present(dic:callback:)))
+                method.setName("present")
+                      .setSelector(selector: #selector(present(dic:callback:)))
             }
             .method { method in
-                method.name("log")
-                    .selector(selector: #selector(printLog(logString:callback:)))
+                method.setName("log")
+                      .setSelector(selector: #selector(printLog(logString:callback:)))
             }
             .method { method in
-                method.name("testNorm")
-                    .selector(selector: #selector(testNorm(value:callback:)))
+                method.setName("testNorm")
+                      .setSelector(selector: #selector(testNorm(value:callback:)))
             }
             .method { method in
-                method.name("multiparameter")
-                    .selector(selector: #selector(multiparams(params1: params2: params3: params4: callback:)))
+                method.setName("multiparameter")
+                      .setSelector(selector: #selector(multiparams(params1: params2: params3: params4: callback:)))
             }
     }
     
@@ -104,7 +104,6 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
         }
     }
     
-    /// 多参数吊用
     @objc func multiparams(params1: String, params2: Array<String>, params3: Dictionary<String, Any> = [:], params4: Int , callback: ([String: Any]) -> Void) {
         print("多参数", params1, params2, params3, params4)
     }

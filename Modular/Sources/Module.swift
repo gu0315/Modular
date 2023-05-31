@@ -75,27 +75,24 @@ public class Module: NSObject {
             let cls: AnyClass = moduleDescription!.moduleClass
             guard let obj = cls as? NSObject.Type else { return }
             guard let sel = moduleMethod!.methodSelector else { return }
+            if (moduleMethod!.isCheckingType) {
+                // var name = Array<Int8>(repeating: 0, count: 512)
+                // method_getArgumentType(ivar_Method!, 3, &name, 512)
+                // String(cString: &name))
+            }
             if (moduleMethod!.isClassMethod) {
                 guard obj.responds(to: sel) else { return }
                 let ivar_Method = class_getClassMethod(cls, sel)
                 if ((ivar_Method) != nil) {
                     let argumentsCount = method_getNumberOfArguments(ivar_Method!)
-                    if (argumentsCount - 2 > 2) {
-                        print("参数大于2")
-                        invocationWithClass(cls: cls, sel: sel, isClassMethod: moduleMethod!.isClassMethod, params: params, callback: callback)
-                        return
-                    }
+                    assert(!(argumentsCount - 2 > 2),"参数大于2")
                 }
                 obj.perform(sel, with: params, with: callback ?? nil)
             } else {
                 let ivar_Method = class_getInstanceMethod(cls, sel)
                 if ((ivar_Method) != nil) {
                     let argumentsCount = method_getNumberOfArguments(ivar_Method!)
-                    if (argumentsCount - 2 > 2) {
-                        print("参数大于2")
-                        invocationWithClass(cls: cls, sel: sel, isClassMethod: moduleMethod!.isClassMethod, params: params, callback: callback)
-                        return
-                    }
+                    assert(!(argumentsCount - 2 > 2),"参数大于2")
                 }
                 let _class = obj.init()
                 guard _class.responds(to: sel) else { return }
@@ -117,20 +114,6 @@ public class Module: NSObject {
             tmpCache[moduleDes.moduleName] = moduleDes
         }
         Module.moduleCache = tmpCache
-    }
-    
-    /// Invocation调用
-    /// 通过func perform(_ aSelector: Selector!, with object1: Any!, with object2: Any!) -> Unmanaged<AnyObject>! 最多只能传两个参数, 可以用Invocation传多个参数
-    @objc public func invocationWithClass(cls: AnyClass,
-                                          sel: Selector,
-                                isClassMethod: Bool,
-                                       params: [String: Any],
-                               callback: (@convention(block) ([AnyHashable: Any]) -> Void)?) {
-        invocation(with: cls, sel: sel, isClassMethod: isClassMethod, params: params) { dic in
-            if ((callback) != nil) {
-                callback!(dic ?? [:])
-            }
-        }
     }
 }
 

@@ -10,7 +10,6 @@
 		E63CE099293E171900E5D1A8 /* ModuleURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63CE098293E171900E5D1A8 /* ModuleURL.swift */; };
 		E63CE2102A21A07100E8A674 /* TestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63CE20F2A21A07100E8A674 /* TestModel.swift */; };
 		E677E2F7293456AF00C57961 /* TestObjc.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677E2F6293456AF00C57961 /* TestObjc.swift */; };
-		E677E31029362BF000C57961 /* NSObject+Invocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E677E30F29362BF000C57961 /* NSObject+Invocation.m */; };
 		E6FF9D1E292D0EA700C4CF11 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF9D1D292D0EA700C4CF11 /* AppDelegate.swift */; };
 		E6FF9D20292D0EA700C4CF11 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF9D1F292D0EA700C4CF11 /* SceneDelegate.swift */; };
 		E6FF9D22292D0EA700C4CF11 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF9D21292D0EA700C4CF11 /* ViewController.swift */; };
@@ -49,8 +48,6 @@
 		E63CE098293E171900E5D1A8 /* ModuleURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleURL.swift; sourceTree = "<group>"; };
 		E63CE20F2A21A07100E8A674 /* TestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestModel.swift; sourceTree = "<group>"; };
 		E677E2F6293456AF00C57961 /* TestObjc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestObjc.swift; sourceTree = "<group>"; };
-		E677E30E29362BF000C57961 /* NSObject+Invocation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+Invocation.h"; sourceTree = "<group>"; };
-		E677E30F29362BF000C57961 /* NSObject+Invocation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Invocation.m"; sourceTree = "<group>"; };
 		E6FF9D1A292D0EA700C4CF11 /* Modular.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Modular.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6FF9D1D292D0EA700C4CF11 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E6FF9D1F292D0EA700C4CF11 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -167,8 +164,6 @@
 				E6FF9D64292D241700C4CF11 /* ModuleDescription.swift */,
 				E6FF9D66292DCD1500C4CF11 /* ModuleMethod.swift */,
 				E63CE098293E171900E5D1A8 /* ModuleURL.swift */,
-				E677E30E29362BF000C57961 /* NSObject+Invocation.h */,
-				E677E30F29362BF000C57961 /* NSObject+Invocation.m */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -312,7 +307,6 @@
 				E6FF9D67292DCD1500C4CF11 /* ModuleMethod.swift in Sources */,
 				E63CE2102A21A07100E8A674 /* TestModel.swift in Sources */,
 				E6FF9D59292D1D0300C4CF11 /* Test.m in Sources */,
-				E677E31029362BF000C57961 /* NSObject+Invocation.m in Sources */,
 				E6FF9D65292D241700C4CF11 /* ModuleDescription.swift in Sources */,
 				E6FF9D20292D0EA700C4CF11 /* SceneDelegate.swift in Sources */,
 				E6FF9D5F292D1F3A00C4CF11 /* TestViewController.m in Sources */,

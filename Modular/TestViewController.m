@@ -70,18 +70,18 @@
 + (void)moduleDescriptionWithDescription:(ModuleDescription * _Nonnull)description {
     description.moduleNameClosure(@"testOC")
         .methodClosure(^(ModuleMethod * moduleMethod) {
-            [moduleMethod selectorWithSelector: @selector(push:callback:)];
-            [moduleMethod name:@"push"];
+            [moduleMethod setSelectorWithSelector: @selector(push:callback:)];
+            [moduleMethod setName:@"push"];
         })
         .methodClosure(^(ModuleMethod * moduleMethod) {
-            [moduleMethod selectorWithSelector: @selector(present:)];
-            [moduleMethod name:@"present"];
-            [moduleMethod isClassMethod:YES];
+            [moduleMethod setSelectorWithSelector: @selector(present:)];
+            [moduleMethod setName:@"present"];
+            [moduleMethod setIsClassMethod:YES];
         })
         // 多参数
         .methodClosure(^(ModuleMethod * moduleMethod) {
-            [moduleMethod selectorWithSelector: @selector(multiparameterLog:parameter1:parameter2:)];
-            [moduleMethod name:@"multiparameterLog"];
+            [moduleMethod setSelectorWithSelector: @selector(multiparameterLog:parameter1:parameter2:)];
+            [moduleMethod setName:@"multiparameterLog"];
         });
 }
 

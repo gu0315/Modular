@@ -16,8 +16,8 @@
 + (void)moduleDescriptionWithDescription:(ModuleDescription * _Nonnull)description {
     description.moduleNameClosure(@"NSObject")
         .methodClosure(^(ModuleMethod * moduleMethod) {
-            [moduleMethod selectorWithSelector: @selector(testBridge:)];
-            [moduleMethod name:@"open1"];
+            [moduleMethod setSelectorWithSelector: @selector(testBridge:)];
+            [moduleMethod setName:@"open1"];
         });
 }
 

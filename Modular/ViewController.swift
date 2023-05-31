@@ -93,12 +93,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 print("调用模块方法的回调-》", parameters)
             }
         } else if (indexPath.row == 6) {
-//            Module.share.performWithModuleName(moduleName:"testSwift", selectorName: "multiparameter", params: [
-//                "params1": "1",
-//                "params2": ["1"],
-//                "params3": ["key": "value"],
-//                "params4": 20
-//            ], callback: nil)
+            Module.share.performWithModuleName(moduleName:"testSwift", selectorName: "multiparameter", params: [
+                "params1": "1",
+                "params2": ["1"],
+                "params3": ["key": "value"],
+                "params4": 20
+            ], callback: nil)
         }
     }
 }
