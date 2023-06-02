@@ -34,63 +34,70 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
     static func moduleDescription(description: ModuleDescription) {
         description.moduleName("testSwift")
             .method { method in
-                method.setIsClassMethod(true)
-                      .setName("push")
-                      .setSelector(selector: #selector(push(dic:callback:)))
+                method.classMethod(true)
+                      .name("push")
+                      .selector(selector: #selector(push(str:callback:)))
+                      .parameterDescription { enumerator in
+                          enumerator.next()?.add(paramName: "str", paramType: .Map)
+                          enumerator.next()?.add(paramName: "callback", paramType: .Block)
+                      }
             }
             .method { method in
-                method.setName("present")
-                      .setSelector(selector: #selector(present(dic:callback:)))
+                method.name("present")
+                      .selector(selector: #selector(present(str:callback:)))
+                      .parameterDescription { enumerator in
+                          enumerator.next()?.add(paramName: "str", paramType: .Map)
+                          enumerator.next()?.add(paramName: "callback", paramType: .Block)
+                      }
             }
             .method { method in
-                method.setName("log")
-                      .setSelector(selector: #selector(printLog(logString:callback:)))
+                method.name("log")
+                      .selector(selector: #selector(printLog(logString:callback:)))
+                      .parameterDescription { enumerator in
+                          enumerator.next()?.add(paramName: "logString", paramType: .Map)
+                          enumerator.next()?.add(paramName: "callback", paramType: .Block)
+                      }
             }
             .method { method in
-                method.setName("testNorm")
-                      .setSelector(selector: #selector(testNorm(value:callback:)))
+                method.name("testNorm")
+                      .selector(selector: #selector(testNorm(value:callback:)))
+                      .parameterDescription { enumerator in
+                          enumerator.next()?.add(paramName: "value", paramType: .String)
+                          enumerator.next()?.add(paramName: "callback", paramType: .Block)
+                      }
             }
             .method { method in
-                method.setName("multiparameter")
-                      .setSelector(selector: #selector(multiparams(params1: params2: params3: params4: callback:)))
+                method.name("multiparameter")
+                      .selector(selector: #selector(multiparams(params1: params2: params3: params4: callback:)))
+                      .parameterDescription { enumerator in
+                          enumerator.next()?.add(paramName: "params1", paramType: .String)
+                          enumerator.next()?.add(paramName: "params2", paramType: .Array)
+                          enumerator.next()?.add(paramName: "params3", paramType: .Map)
+                          enumerator.next()?.add(paramName: "params4", paramType: .Number)
+                          enumerator.next()?.add(paramName: "callback", paramType: .Block)
+                      }
             }
     }
     
     
-    @objc func printLog(logString: Dictionary<String, Any>, callback: ([String: Any]) -> Void) {
+    @objc func printLog(logString: String, callback: ([String: Any]) -> Void) {
         print(logString)
     }
-
-    @objc func printLog1(dic: Dictionary<String, Any>, callback: ([String: Any]) -> Void) {
-        let data = try? JSONSerialization.data(withJSONObject: dic, options: JSONSerialization.WritingOptions.init(rawValue: 0))
-        let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-        let alert = UIAlertController(title: "", message: jsonStr as String? ?? "", preferredStyle: .alert)
-        alert.addAction(UIAlertAction.init(title: "知道了", style:.default, handler: { _ in
-
-        }))
+    
+    @objc class func push(str: String, callback: ([String: Any]) -> Void) {
+        let vc = TestSwiftViewController()
+        vc.str = str
+        callback(["key": "我已经push啦"])
         guard let topVc = TestSwiftViewController.applicationTopVC() else {
             return
         }
-        topVc.present(alert, animated: true)
-    }
-    
-    @objc class func push(dic: Dictionary<String, Any> = [:], callback: ([String: Any]) -> Void) {
-        let vc = TestSwiftViewController()
-        let data = try? JSONSerialization.data(withJSONObject: dic, options: JSONSerialization.WritingOptions.init(rawValue: 0))
-        let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-        vc.str = jsonStr! as String
-        guard let topVc = TestSwiftViewController.applicationTopVC() else {
-            return 
-        }
-        callback(dic)
         topVc.navigationController?.pushViewController(vc, animated: true)
     }
     
-    @objc func present(dic: Dictionary<String, Any> = [:], callback: ([String: Any]) -> Void) {
+    @objc func present(str: String, callback: ([String: Any]) -> Void) {
         let vc = TestSwiftViewController()
-        let data = try? JSONSerialization.data(withJSONObject: dic, options: JSONSerialization.WritingOptions.init(rawValue: 0))
-        let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-        vc.str = jsonStr! as String
+        vc.str = str
+        callback(["key": "我已经present啦"])
         guard let topVc = TestSwiftViewController.applicationTopVC() else {
             return
         }

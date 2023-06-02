@@ -36,7 +36,6 @@ public class ModuleURL: NSObject {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     func moduleName(url:URL) -> String {
         if url.pathComponents.count > 0 {
             var names = url.pathComponents
@@ -49,7 +48,7 @@ public class ModuleURL: NSObject {
 
     func moduleParams(url:URL) -> Dictionary<String, Any> {
         var module_params: [String: Any] = [:]
-        if ((url.query) != nil) {
+        if (url.query?.count ?? 0 > 0) {
             for pair in url.query!.components(separatedBy: "&") {
                 let key = pair.components(separatedBy: "=")[0]
                 let value = pair

@@ -61,8 +61,9 @@
     [topVc presentViewController:vc animated:YES completion:nil];
 }
 
-- (void)multiparameterLog:(NSDictionary *)dic parameter1:(NSString *)parameter1 parameter2:(int)parameter2 {
-    NSLog(@"dic==%@\nparameter1==%@\nparameter2==%d", dic, parameter1, parameter2);
+- (void)multiparameterLog:(NSDictionary *)dic callback:(void(^ __nullable)( NSDictionary * _Nullable moduleInfo))callback {
+    NSLog(@"dic==%@\nparameter1==%@", dic, callback);
+    callback(@{@"哈哈":@"value"});
 }
 
 
@@ -70,18 +71,17 @@
 + (void)moduleDescriptionWithDescription:(ModuleDescription * _Nonnull)description {
     description.moduleNameClosure(@"testOC")
         .methodClosure(^(ModuleMethod * moduleMethod) {
-            [moduleMethod setSelectorWithSelector: @selector(push:callback:)];
-            [moduleMethod setName:@"push"];
+            [moduleMethod selectorWithSelector: @selector(push:callback:)];
+            [moduleMethod name:@"push"];
         })
         .methodClosure(^(ModuleMethod * moduleMethod) {
-            [moduleMethod setSelectorWithSelector: @selector(present:)];
-            [moduleMethod setName:@"present"];
-            [moduleMethod setIsClassMethod:YES];
+            [moduleMethod selectorWithSelector: @selector(present:)];
+            [moduleMethod name:@"present"];
+            [moduleMethod classMethod:YES];
         })
-        // 多参数
         .methodClosure(^(ModuleMethod * moduleMethod) {
-            [moduleMethod setSelectorWithSelector: @selector(multiparameterLog:parameter1:parameter2:)];
-            [moduleMethod setName:@"multiparameterLog"];
+            [moduleMethod selectorWithSelector: @selector(multiparameterLog:callback:)];
+            [moduleMethod name:@"log"];
         });
 }
 

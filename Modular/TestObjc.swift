@@ -11,8 +11,8 @@ class TestObjc: NSObject, ModuleProtocol {
     static func moduleDescription(description: ModuleDescription) {
         description.moduleName("TestObjc")
             .method { method in
-                method.setName("alert")
-                    .setSelector(selector: #selector(testAlert(dic:)))
+                method.name("alert")
+                    .selector(selector: #selector(testAlert(dic:)))
             }
     }
     

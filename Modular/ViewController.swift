@@ -25,9 +25,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                       "present界面(Swift模块)",
                       "组件调用Objc（Swift模块）",
                       "push界面(OC模块)",
-                      "调用多参数(OC模块)",
+                      "调用Log",
                       "Url调用",
-                      "Invocation多参数调用"]
+                      "多参数调用(报错)"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,58 +47,43 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath.row == 0) {
-            Module.share.performWithModuleName(moduleName:"testSwift", selectorName: "push", params: [
-                "id": "1",
-                "name": "顾钱想",
-                "sex": 20,
-                "str": "1"
+            Module.share.perform(moduleName:"testSwift", selectorName: "push", params: [
+                "str": "push"
             ]) { parameters in
                 //页面参数回调
                 print("调用模块方法的回调-》", parameters)
             }
         } else if (indexPath.row == 1) {
-            Module.share.performWithModuleName(moduleName:"testSwift", selectorName: "present", params: [
-                "id": "1",
-                "name": "顾钱想",
-                "sex": 20,
-                "str": "1"
-            ], callback: nil)
-        } else if (indexPath.row == 2) {
-            Module.share.performWithModuleName(moduleName:"testSwift", selectorName: "testNorm", params: [
-                "id": "1",
-                "name": "顾钱想",
-                "sex": 20
-            ], callback: nil)
-        } else if (indexPath.row == 3) {
-            Module.share.performWithModuleName(moduleName:"testOC", selectorName: "push", params: [
-                "id": "1",
-                "name": "顾钱想",
-                "sex": 20,
-                "str": "1"
+            Module.share.perform(moduleName:"testSwift", selectorName: "present", params: [
+                "str": "present"
             ]) { parameters in
+                //页面参数回调
                 print("调用模块方法的回调-》", parameters)
             }
+        } else if (indexPath.row == 2) {
+            Module.share.perform(moduleName:"testSwift", selectorName: "log", params: [
+                "logString": "logString"
+            ])
+        } else if (indexPath.row == 3) {
+            Module.share.perform(moduleName:"testOC", selectorName: "push", params: [
+                "dic": ["key": "value"]
+            ])
         } else if (indexPath.row == 4) {
-            // 调用多参数
-            Module.share.performWithModuleName(moduleName: "testOC", selectorName: "multiparameterLog", params: [
-                "dic": ["key": "value"],
-                "parameter1": "顾钱想",
-                "parameter2": 20
-            ]) { parameters in
-                print("调用多参数", parameters as Any)
-            }
+            Module.share.perform(moduleName: "testOC", selectorName: "log", params: [
+                "dic": ["key": "value"]
+            ])
         } else if (indexPath.row == 5) {
-            Module.share.performWithUrl(url:"scheme://push/testSwift?code=1111"){ parameters in
+            Module.share.performWithUrl(url:"scheme://push/testSwift?str=1111"){ parameters in
                 //页面参数回调
                 print("调用模块方法的回调-》", parameters)
             }
         } else if (indexPath.row == 6) {
-            Module.share.performWithModuleName(moduleName:"testSwift", selectorName: "multiparameter", params: [
-                "params1": "1",
-                "params2": ["1"],
+            Module.share.perform(moduleName:"testSwift", selectorName: "multiparameter", params: [
+                "params1": "params1",
+                "params2": [],
                 "params3": ["key": "value"],
-                "params4": 20
-            ], callback: nil)
+                "params3": 4
+            ])
         }
     }
 }

@@ -21,7 +21,7 @@ public class ModuleDescription: NSObject {
     var moduleName: String = ""
     // 模块关联的方法
     var moduleMethods: Dictionary<String, ModuleMethod> = [:]
-    
+
     // Objcet-C链式调用设置moduleName
     @objc public var moduleNameClosure: ((String) -> ModuleDescription)?
     // Objcet-C链式调用设置method
