@@ -73,15 +73,26 @@
         .methodClosure(^(ModuleMethod * moduleMethod) {
             [moduleMethod selectorWithSelector: @selector(push:callback:)];
             [moduleMethod name:@"push"];
+            [moduleMethod parameterDescription:^(ModuleParameterDes * enumerator) {
+                [[enumerator next] addWithParamName:@"dic" paramType:  ModuleParameterTypeMap  isStrict:NO];
+                [[enumerator next] addWithParamName:@"callback" paramType: ModuleParameterTypeBlock isStrict:NO];
+            }];
         })
         .methodClosure(^(ModuleMethod * moduleMethod) {
             [moduleMethod selectorWithSelector: @selector(present:)];
             [moduleMethod name:@"present"];
             [moduleMethod classMethod:YES];
+            [moduleMethod parameterDescription:^(ModuleParameterDes * enumerator) {
+                [[enumerator next] addWithParamName:@"dic" paramType:  ModuleParameterTypeMap  isStrict:NO];
+            }];
         })
         .methodClosure(^(ModuleMethod * moduleMethod) {
             [moduleMethod selectorWithSelector: @selector(multiparameterLog:callback:)];
             [moduleMethod name:@"log"];
+            [moduleMethod parameterDescription:^(ModuleParameterDes * enumerator) {
+                [[enumerator next] addWithParamName:@"dic" paramType:  ModuleParameterTypeMap  isStrict:NO];
+                [[enumerator next] addWithParamName:@"callback" paramType: ModuleParameterTypeBlock isStrict:NO];
+            }];
         });
 }
 

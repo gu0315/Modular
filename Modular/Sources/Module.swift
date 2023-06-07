@@ -108,6 +108,8 @@ public class Module: NSObject {
     }
     
     
+    
+    
     private func safePerformWithNSObject(obj: AnyObject,
                                          sel: Selector,
                                          params: [String: Any],
@@ -117,22 +119,69 @@ public class Module: NSObject {
             _ = obj.perform(sel)
         } else {
             let paramsName = paramsTypes[0].paramName
-            // TODO 检验参数类型
-            // let paramsType = paramsTypes[0].paramType
+            let paramsType = paramsTypes[0].paramType
             let paramValue = params[paramsName]
             if (paramsTypes.count == 1 ) {
-                // TODO
-                _ = obj.perform(sel, with: paramValue)
+                if (paramsType == .Block && callback != nil) {
+                    _ = obj.perform(sel, with: callback)
+                } else if (checkType(value: paramValue as Any, type: paramsType)) {
+                    _ = obj.perform(sel, with: paramValue)
+                } else {
+                    assert(false, "类型不匹配")
+                }
             } else {
-                // TODO
-                _ = obj.perform(sel, with: paramValue, with: callback)
+                let paramsNameNext = paramsTypes[1].paramName
+                let paramsTypeNext = paramsTypes[1].paramType
+                let paramValueNext = params[paramsNameNext]
+                let check = checkType(value: paramValue as Any, type: paramsType)
+                if (callback == nil && paramsTypeNext == .Block) {
+                    assert(false, "类型不匹配")
+                    return
+                }
+                if (paramsTypeNext == .Block && callback != nil) {
+                    if (checkType(value: paramValueNext as Any, type: paramsTypeNext) && check) {
+                        _ = obj.perform(sel, with: paramValue, with: callback)
+                    } else {
+                        let checkTypeNext = checkType(value: paramValueNext as Any, type: paramsTypeNext)
+                        if (check && checkTypeNext) {
+                            _ = obj.perform(sel, with: paramValue, with: paramValueNext)
+                        } else {
+                            assert(false, "类型不匹配")
+                        }
+                    }
+                }
             }
         }
     }
     
-
-    func checkType<T>(_ value: T, isType expectedType: T.Type) -> Bool {
-        return type(of: value) == expectedType
+    func checkType(value: Any, type: ModuleParameterType) -> Bool {
+        var isTypeMatching = false
+        switch type {
+        case .String:
+            if value is NSString {
+                isTypeMatching = true
+            }
+            break
+        case .Number:
+            if value is NSNumber {
+                isTypeMatching = true
+            }
+            break
+        case .Map:
+            if value is NSDictionary {
+                isTypeMatching = true
+            }
+            break
+        case .Array:
+            if value is NSArray {
+                isTypeMatching = true
+            }
+            break
+        case .Block, .Object, .Unknown, .Empty:
+            isTypeMatching = true
+            break
+        }
+        return isTypeMatching
     }
     
     /// RN 使用，动态注册模块描述, 优先级较高，可以覆盖原来的模块描述

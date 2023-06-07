@@ -38,7 +38,7 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
                       .name("push")
                       .selector(selector: #selector(push(str:callback:)))
                       .parameterDescription { enumerator in
-                          enumerator.next()?.add(paramName: "str", paramType: .Map)
+                          enumerator.next()?.add(paramName: "str", paramType: .String)
                           enumerator.next()?.add(paramName: "callback", paramType: .Block)
                       }
             }
@@ -46,7 +46,7 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
                 method.name("present")
                       .selector(selector: #selector(present(str:callback:)))
                       .parameterDescription { enumerator in
-                          enumerator.next()?.add(paramName: "str", paramType: .Map)
+                          enumerator.next()?.add(paramName: "str", paramType: .String)
                           enumerator.next()?.add(paramName: "callback", paramType: .Block)
                       }
             }
@@ -54,7 +54,7 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
                 method.name("log")
                       .selector(selector: #selector(printLog(logString:callback:)))
                       .parameterDescription { enumerator in
-                          enumerator.next()?.add(paramName: "logString", paramType: .Map)
+                          enumerator.next()?.add(paramName: "logString", paramType: .String)
                           enumerator.next()?.add(paramName: "callback", paramType: .Block)
                       }
             }

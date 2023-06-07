@@ -7,9 +7,9 @@
 
 import UIKit
 
-public enum ModuleParameterType {
+@objc public enum ModuleParameterType: Int {
     /// 字符串类型,参数会被转为NSString
-    case String
+    case String = 0
     /// 数字类型，参数会被转为NSNumber
     case Number
     /// 字典类型，参数对应的name如果无法找到或者参数不是字典类型，模块接收到的所有参数组成的字典会被传入该参数，map支持strict模式
@@ -58,7 +58,7 @@ public enum ModuleParameterType {
     }
     
     @discardableResult
-    func add(paramName: String, paramType: ModuleParameterType, isStrict: Bool = false) -> ModuleParameter {
+    @objc func add(paramName: String,  paramType: ModuleParameterType, isStrict: Bool = false) -> ModuleParameter {
         self.paramName = paramName
         self.paramType = paramType
         self.isStrict = isStrict
@@ -76,7 +76,7 @@ public class ModuleParameterDes: NSObject {
         self.currentIndex = currentIndex
     }
     
-    func next() -> ModuleParameter? {
+    @objc func next() -> ModuleParameter? {
         if currentIndex <= parameters.count {
             // 初始化parameters为[], 自动添加
             parameters.append(ModuleParameter.init(paramName: "", paramType: .Unknown, isStrict: false))
