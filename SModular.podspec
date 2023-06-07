@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = "SModular"
-    s.version      = "0.0.6"
+    s.version      = "0.0.7"
     s.ios.deployment_target = '11.0'
     s.summary      = "SModular"
     s.homepage     = "https://github.com/gu0315/Modular"
