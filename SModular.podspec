@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
     s.name         = "SModular"
-    s.version      = "0.0.5"
-    s.ios.deployment_target = '13.0'
+    s.version      = "0.0.6"
+    s.ios.deployment_target = '11.0'
     s.summary      = "SModular"
     s.homepage     = "https://github.com/gu0315/Modular"
     s.license      = { :type => 'Apache License, Version 2.0', :text => <<-LICENSE
