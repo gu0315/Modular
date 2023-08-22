@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import ObjectiveC
 
-@objc public enum ModuleParameterType: Int {
+@objc public enum ModuleParameterType: Int, Equatable {
     /// 字符串类型,参数会被转为NSString
     case String = 0
     /// 数字类型，参数会被转为NSNumber
@@ -24,6 +25,31 @@ import UIKit
     case Unknown
     /// 函数返回空值类型，默认的函数返回值类型
     case Empty
+    
+    var type: AnyObject {
+        switch self {
+        case .String:
+            return NSString.self
+        case .Number:
+            return NSNumber.self
+        case .Map:
+            return NSDictionary.self
+        case .Array:
+            return NSArray.self
+        case .Block:
+            return NSObject.self
+        case .Object:
+            return NSObject.self
+        case .Unknown:
+            return NSObject.self
+        case .Empty:
+            return NSObject.self
+        }
+    }
+    
+    public static func ==(lhs: ModuleParameterType, rhs: ModuleParameterType) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
 }
 
 

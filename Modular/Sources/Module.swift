@@ -55,7 +55,7 @@ public class Module: NSObject {
         guard let module_name = url.module_name, let module_method = url.module_method else {
             return
         }
-        self.perform(moduleName: module_name, selectorName: module_method, params: url.module_params, callback: callback, isUrl: true)
+        self.perform(moduleName: module_name, selectorName: module_method, params: url.module_params, callback: callback)
     }
     
     /// 通过moduleName调用
@@ -68,7 +68,7 @@ public class Module: NSObject {
                                           selectorName: String,
                                                 params: [String: Any],
                                               callback: (@convention(block) ([AnyHashable: AnyObject]) -> Void)? = nil,
-                                                 isUrl: Bool = false){
+                                                 isDefault404: Bool = false){
         let moduleDescription = Module.moduleCache[moduleName]
         let moduleMethod = moduleDescription?.moduleMethods[selectorName]
         if ((moduleMethod) != nil) {
@@ -76,9 +76,13 @@ public class Module: NSObject {
             guard let obj = cls as? NSObject.Type else { return }
             guard let sel = moduleMethod!.methodSelector else { return }
             let paramsTypes = moduleMethod?.parameterDes.parameters
-            // TODO 构造校验参数
             if (moduleMethod!.isClassMethod) {
-                guard obj.responds(to: sel) else { return }
+                guard obj.responds(to: sel) else {
+                    if (!isDefault404) {
+                        self.open404()
+                    }
+                    return
+                }
                 let ivar_Method = class_getClassMethod(cls, sel)
                 if ((ivar_Method) != nil) {
                     let argumentsCount = method_getNumberOfArguments(ivar_Method!)
@@ -88,7 +92,9 @@ public class Module: NSObject {
                 safePerformWithNSObject(obj: obj, sel: sel, params: params, paramsTypes: paramsTypes ?? [], callback: callback)
             } else {
                 guard obj.init().responds(to: sel) else {
-                    // TODO 处理无响应请求, 自定义404页面
+                    if (!isDefault404) {
+                        self.open404()
+                    }
                     return
                 }
                 let ivar_Method = class_getInstanceMethod(cls, sel)
@@ -100,14 +106,21 @@ public class Module: NSObject {
                 safePerformWithNSObject(obj: obj.init(), sel: sel, params: params, paramsTypes: paramsTypes ?? [], callback: callback)
             }
         } else {
-            // TODO 处理无响应请求, 自定义404页面
-            if (isUrl) {
-                print("未找到模块方法-----404")
-            }
+            self.open404()
         }
     }
     
     
+    private func open404() {
+        guard let s = ModuleConfig.share.default404ModuleURL else {
+            return
+        }
+        let url = ModuleURL.init(url: s)
+        guard let module_name = url.module_name, let module_method = url.module_method else {
+            return
+        }
+        self.perform(moduleName: module_name, selectorName: module_method, params: url.module_params, callback: nil, isDefault404: true)
+    }
     
     
     private func safePerformWithNSObject(obj: AnyObject,

@@ -26,7 +26,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                       "调用Log",
                       "Url调用",
                       "push界面(OC模块)",
-                      "present界面(OC模块)"]
+                      "present界面(OC模块)","404"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,7 +85,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 //页面参数回调
                 print("调用模块方法的回调-》", parameters)
             }
+        } else if (indexPath.row == 6) {
+            Module.share.perform(moduleName: "xxxx", selectorName: "xxxx", params: [:]) { parameters in
+                //页面参数回调
+                print("调用模块方法的回调-》", parameters)
+            }
         }
+    }
+    
+    func printMethods() {
+        
     }
 }
 
