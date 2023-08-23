@@ -54,7 +54,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
         } else if (indexPath.row == 1) {
             Module.share.perform(moduleName:"testSwift", selectorName: "present", params: [
-                "str": "present"
+                "str": ""
             ]) { parameters in
                 //页面参数回调
                 print("调用模块方法的回调-》", parameters)

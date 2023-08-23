@@ -58,13 +58,10 @@ import ObjectiveC
     var paramName: String
     // 参数类型
     var paramType: ModuleParameterType
-    // 是否严格匹配，默认no，开启严格匹配的参数，会在参数列表里寻找对应名称和对应类型的数据，不再有兼容处理，目前只有map支持该模式
-    var isStrict: Bool = false
-    
-    init(paramName: String, paramType: ModuleParameterType, isStrict: Bool) {
+
+    init(paramName: String, paramType: ModuleParameterType) {
         self.paramName = paramName
         self.paramType = paramType
-        self.isStrict = isStrict
     }
     
     
@@ -78,16 +75,10 @@ import ObjectiveC
         return self
     }
     
-    func strict(_ isStrict: Bool) -> ModuleParameter {
-        self.isStrict = isStrict
-        return self
-    }
-    
     @discardableResult
     @objc func add(paramName: String,  paramType: ModuleParameterType, isStrict: Bool = false) -> ModuleParameter {
         self.paramName = paramName
         self.paramType = paramType
-        self.isStrict = isStrict
         return self
     }
     
@@ -105,7 +96,7 @@ public class ModuleParameterDes: NSObject {
     @objc func next() -> ModuleParameter? {
         if currentIndex <= parameters.count {
             // 初始化parameters为[], 自动添加
-            parameters.append(ModuleParameter.init(paramName: "", paramType: .Unknown, isStrict: false))
+            parameters.append(ModuleParameter.init(paramName: "", paramType: .Unknown))
         }
         let parameter = parameters[currentIndex]
         currentIndex += 1

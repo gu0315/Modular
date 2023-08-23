@@ -44,13 +44,13 @@ public class Module: NSObject {
         }
         Module.moduleCache = tmpCache
     }
-
+    
     ///  通过url调用
     /// - Parameters:
     ///   - url: 协议  scheme://selectorName/moduleName?params   ->  scheme://open/myWallet?code=1111
     ///   - callback: 模块回调
     @objc public func performWithUrl(url: String,
-                                callback:(@convention(block) ([AnyHashable: AnyObject]) -> Void)?){
+                                     callback:(@convention(block) ([AnyHashable: AnyObject]) -> Void)?){
         let url = ModuleURL.init(url: url)
         guard let module_name = url.module_name, let module_method = url.module_method else {
             return
@@ -65,10 +65,10 @@ public class Module: NSObject {
     ///   - params:  模块参数
     ///   - callback: 模块回调
     @objc public func perform(moduleName: String,
-                                          selectorName: String,
-                                                params: [String: Any],
-                                              callback: (@convention(block) ([AnyHashable: AnyObject]) -> Void)? = nil,
-                                                 isDefault404: Bool = false){
+                              selectorName: String,
+                              params: [String: Any],
+                              callback: (@convention(block) ([AnyHashable: AnyObject]) -> Void)? = nil,
+                              isDefault404: Bool = false){
         let moduleDescription = Module.moduleCache[moduleName]
         let moduleMethod = moduleDescription?.moduleMethods[selectorName]
         if ((moduleMethod) != nil) {
@@ -130,76 +130,58 @@ public class Module: NSObject {
                                          callback: (@convention(block) ([AnyHashable: AnyObject]) -> Void)? = nil) {
         if (paramsTypes.count == 0) {
             _ = obj.perform(sel)
-        } else {
+        } else if (paramsTypes.count == 1) {
             let paramsName = paramsTypes[0].paramName
             let paramsType = paramsTypes[0].paramType
             let paramValue = params[paramsName]
-            if (paramsTypes.count == 1 ) {
-                if (paramsType == .Block && callback != nil) {
-                    _ = obj.perform(sel, with: callback)
-                } else if (checkType(value: paramValue as Any, type: paramsType)) {
-                    _ = obj.perform(sel, with: paramValue)
-                } else {
-                    assert(false, "类型不匹配")
-                }
+            if (paramsType == .Block && callback != nil) {
+                _ = obj.perform(sel, with: callback)
+            } else if (checkType(value: paramValue as Any, type: paramsType)) {
+                _ = obj.perform(sel, with: paramValue)
             } else {
-                let paramsNameNext = paramsTypes[1].paramName
-                let paramsTypeNext = paramsTypes[1].paramType
-                let paramValueNext = params[paramsNameNext]
-                let check = checkType(value: paramValue as Any, type: paramsType)
-                if (callback == nil && paramsTypeNext == .Block) {
-                    assert(false, "类型不匹配")
-                    return
-                }
-                if (paramsTypeNext == .Block && callback != nil) {
-                    if (checkType(value: paramValueNext as Any, type: paramsTypeNext) && check) {
-                        _ = obj.perform(sel, with: paramValue, with: callback)
+                assert(false, "类型不匹配")
+            }
+        } else if (paramsTypes.count == 2) {
+            let paramsName = paramsTypes[0].paramName
+            let paramsType = paramsTypes[0].paramType
+            let paramValue = params[paramsName]
+            let paramsNameNext = paramsTypes[1].paramName
+            let paramsTypeNext = paramsTypes[1].paramType
+            let paramValueNext = params[paramsNameNext]
+            let check = checkType(value: paramValue as Any, type: paramsType)
+            if (callback == nil && paramsTypeNext == .Block) {
+                assert(false, "类型不匹配")
+                return
+            }
+            if (paramsTypeNext == .Block && callback != nil) {
+                if (checkType(value: paramValueNext as Any, type: paramsTypeNext) && check) {
+                    _ = obj.perform(sel, with: paramValue, with: callback)
+                } else {
+                    let checkTypeNext = checkType(value: paramValueNext as Any, type: paramsTypeNext)
+                    if (check && checkTypeNext) {
+                        _ = obj.perform(sel, with: paramValue, with: paramValueNext)
                     } else {
-                        let checkTypeNext = checkType(value: paramValueNext as Any, type: paramsTypeNext)
-                        if (check && checkTypeNext) {
-                            _ = obj.perform(sel, with: paramValue, with: paramValueNext)
-                        } else {
-                            assert(false, "类型不匹配")
-                        }
+                        assert(false, "类型不匹配")
                     }
                 }
             }
         }
+        
     }
     
     func checkType(value: Any, type: ModuleParameterType) -> Bool {
-        var isTypeMatching = false
         switch type {
-        case .String:
-            if value is NSString {
-                isTypeMatching = true
-            }
-            break
-        case .Number:
-            if value is NSNumber {
-                isTypeMatching = true
-            }
-            break
-        case .Map:
-            if value is NSDictionary {
-                isTypeMatching = true
-            }
-            break
-        case .Array:
-            if value is NSArray {
-                isTypeMatching = true
-            }
-            break
-        case .Block, .Object, .Unknown, .Empty:
-            isTypeMatching = true
-            break
+        case .String: return value is String
+        case .Number: return value is NSNumber
+        case .Map: return value is NSDictionary
+        case .Array: return value is NSArray
+        case .Block, .Object, .Unknown, .Empty: return true
         }
-        return isTypeMatching
     }
     
     /// RN 使用，动态注册模块描述, 优先级较高，可以覆盖原来的模块描述
     /// - Parameter modules: 模块描述数组
-    @objc public func registerModules(modules: Array<ModuleDescription>) {
+    public func registerModules(modules: Array<ModuleDescription>) {
         var tmpCache: Dictionary<String, ModuleDescription> = Module.moduleCache
         for (_, moduleDes) in modules.enumerated() {
             tmpCache[moduleDes.moduleName] = moduleDes
