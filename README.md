@@ -2,7 +2,7 @@
 
 iOS组件化
 
-通过协议，利用perform实现的iOS组件化方案，逻辑清晰，使用简单方便, 可以下载Demo查看使用
+通过协议，利用perform实现的iOS组件化方案，逻辑清晰，支持参数校验，使用简单方便, 可以下载Demo查看使用
 
 <img src="http://img.souche.com/f2e/c452772148ad575bd0b8c43c01219952.gif" alt="图片替换文本" width="390" height="844" align="bottom" />
 
