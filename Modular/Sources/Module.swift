@@ -83,7 +83,8 @@ public class Module: NSObject {
         if moduleMethod.isClassMethod {
             obj = cls
         } else {
-            obj = cls.init()
+            guard let objType = cls as? NSObject.Type else { return }
+            obj = objType.init()
         }
         guard obj.responds(to: sel) else {
             open404IfNeeded(isDefault404)
