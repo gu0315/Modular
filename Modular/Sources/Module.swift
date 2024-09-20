@@ -68,105 +68,88 @@ public class Module: NSObject {
                               selectorName: String,
                               params: [String: Any],
                               callback: (@convention(block) ([AnyHashable: AnyObject]) -> Void)? = nil,
-                              isDefault404: Bool = false){
-        let moduleDescription = Module.moduleCache[moduleName]
-        let moduleMethod = moduleDescription?.moduleMethods[selectorName]
-        if ((moduleMethod) != nil) {
-            let cls: AnyClass = moduleDescription!.moduleClass
-            guard let obj = cls as? NSObject.Type else { return }
-            guard let sel = moduleMethod!.methodSelector else { return }
-            let paramsTypes = moduleMethod?.parameterDes.parameters
-            if (moduleMethod!.isClassMethod) {
-                guard obj.responds(to: sel) else {
-                    if (!isDefault404) {
-                        self.open404()
-                    }
-                    return
-                }
-                let ivar_Method = class_getClassMethod(cls, sel)
-                if ((ivar_Method) != nil) {
-                    let argumentsCount = method_getNumberOfArguments(ivar_Method!)
-                    assert(!(argumentsCount - 2 > paramsTypes?.count ?? 0),"请描述所有参数")
-                    assert(!(argumentsCount - 2 > 2),"参数大于2异常")
-                }
-                safePerformWithNSObject(obj: obj, sel: sel, params: params, paramsTypes: paramsTypes ?? [], callback: callback)
-            } else {
-                guard obj.init().responds(to: sel) else {
-                    if (!isDefault404) {
-                        self.open404()
-                    }
-                    return
-                }
-                let ivar_Method = class_getInstanceMethod(cls, sel)
-                if ((ivar_Method) != nil) {
-                    let argumentsCount = method_getNumberOfArguments(ivar_Method!)
-                    assert(!(argumentsCount - 2 > paramsTypes?.count ?? 0),"请描述所有参数")
-                    assert(!(argumentsCount - 2 > 2),"参数大于2异常")
-                }
-                safePerformWithNSObject(obj: obj.init(), sel: sel, params: params, paramsTypes: paramsTypes ?? [], callback: callback)
-            }
+                              isDefault404: Bool = false) {
+        // 获取模块描述和方法
+        guard let moduleDescription = Module.moduleCache[moduleName],
+              let moduleMethod = moduleDescription.moduleMethods[selectorName],
+              let sel = moduleMethod.methodSelector else {
+            open404IfNeeded(isDefault404)
+            return
+        }
+        let cls: AnyClass = moduleDescription.moduleClass
+        let paramsTypes = moduleMethod.parameterDes.parameters
+        // 根据是类方法还是实例方法创建对象
+        let obj: AnyObject
+        if moduleMethod.isClassMethod {
+            obj = cls
         } else {
-            self.open404()
+            obj = cls.init()
         }
-    }
-    
-    
-    private func open404() {
-        guard let s = ModuleConfig.share.default404ModuleURL else {
+        guard obj.responds(to: sel) else {
+            open404IfNeeded(isDefault404)
             return
         }
-        let url = ModuleURL.init(url: s)
-        guard let module_name = url.module_name, let module_method = url.module_method else {
-            return
+        // 获取方法并检查参数数量
+        if let method = moduleMethod.isClassMethod ? class_getClassMethod(cls, sel) : class_getInstanceMethod(cls, sel) {
+            let argumentsCount = method_getNumberOfArguments(method)
+            let expectedParamsCount = argumentsCount - 2
+            // 参数数量断言
+            assert(expectedParamsCount <= paramsTypes.count, "请描述所有参数，实际参数数量不足")
+            assert(expectedParamsCount <= 2, "方法的参数个数大于2，不符合预期")
         }
-        self.perform(moduleName: module_name, selectorName: module_method, params: url.module_params, callback: nil, isDefault404: true)
+        // 调用安全执行函数
+        safePerformWithNSObject(obj: obj, sel: sel, params: params, paramsTypes: paramsTypes, callback: callback)
     }
-    
     
     private func safePerformWithNSObject(obj: AnyObject,
                                          sel: Selector,
                                          params: [String: Any],
                                          paramsTypes: [ModuleParameter],
                                          callback: (@convention(block) ([AnyHashable: AnyObject]) -> Void)? = nil) {
-        if (paramsTypes.count == 0) {
+        // 无参数的情况
+        guard paramsTypes.count > 0 else {
             _ = obj.perform(sel)
-        } else if (paramsTypes.count == 1) {
-            let paramsName = paramsTypes[0].paramName
-            let paramsType = paramsTypes[0].paramType
-            let paramValue = params[paramsName]
-            if (paramsType == .Block && callback != nil) {
+            return
+        }
+        // 提取第一个参数信息
+        let firstParamName = paramsTypes[0].paramName
+        let firstParamType = paramsTypes[0].paramType
+        let firstParamValue = params[firstParamName]
+        // 处理单个参数
+        if paramsTypes.count == 1 {
+            // 如果是 Block 且存在回调，直接调用
+            if firstParamType == .Block, let callback = callback {
                 _ = obj.perform(sel, with: callback)
-            } else if (checkType(value: paramValue as Any, type: paramsType)) {
-                _ = obj.perform(sel, with: paramValue)
+            } else if checkType(value: firstParamValue as Any, type: firstParamType) {
+                _ = obj.perform(sel, with: firstParamValue)
+            } else {
+                assert(false, "\(firstParamName)参数类型不匹配")
+            }
+            return
+        }
+        // 提取第二个参数信息
+        let secondParamName = paramsTypes[1].paramName
+        let secondParamType = paramsTypes[1].paramType
+        let secondParamValue = params[secondParamName]
+        // 处理两个参数的情况
+        if paramsTypes.count == 2 {
+            let firstCheck = checkType(value: firstParamValue as Any, type: firstParamType)
+            let secondCheck = checkType(value: secondParamValue as Any, type: secondParamType)
+            // 如果第一个参数匹配且回调为 Block，进行相应调用
+            if secondParamType == .Block, let callback = callback {
+                if firstCheck {
+                    _ = obj.perform(sel, with: firstParamValue, with: callback)
+                } else {
+                    assert(false, "\(firstParamName)参数类型不匹配")
+                }
+            }
+            // 如果两个参数都匹配，执行两个参数的调用
+            else if firstCheck && secondCheck {
+                _ = obj.perform(sel, with: firstParamValue, with: secondParamValue)
             } else {
                 assert(false, "类型不匹配")
             }
-        } else if (paramsTypes.count == 2) {
-            let paramsName = paramsTypes[0].paramName
-            let paramsType = paramsTypes[0].paramType
-            let paramValue = params[paramsName]
-            let paramsNameNext = paramsTypes[1].paramName
-            let paramsTypeNext = paramsTypes[1].paramType
-            let paramValueNext = params[paramsNameNext]
-            let check = checkType(value: paramValue as Any, type: paramsType)
-            if (callback == nil && paramsTypeNext == .Block) {
-                assert(false, "类型不匹配")
-                return
-            }
-            if (paramsTypeNext == .Block && callback != nil) {
-                if (checkType(value: paramValueNext as Any, type: paramsTypeNext) && check) {
-                    _ = obj.perform(sel, with: paramValue, with: callback)
-                } else {
-                    let checkTypeNext = checkType(value: paramValueNext as Any, type: paramsTypeNext)
-                    if (check && checkTypeNext) {
-                        _ = obj.perform(sel, with: paramValue, with: paramValueNext)
-                    } else {
-                        assert(false, "类型不匹配")
-                    }
-                }
-            }
         }
-        
     }
     
     func checkType(value: Any, type: ModuleParameterType) -> Bool {
@@ -190,3 +173,22 @@ public class Module: NSObject {
     }
 }
 
+extension Module {
+
+    private func open404IfNeeded(_ isDefault404: Bool) {
+        if !isDefault404 {
+            open404()
+        }
+    }
+    
+    private func open404() {
+        guard let s = ModuleConfig.share.default404ModuleURL else {
+            return
+        }
+        let url = ModuleURL.init(url: s)
+        guard let module_name = url.module_name, let module_method = url.module_method else {
+            return
+        }
+        self.perform(moduleName: module_name, selectorName: module_method, params: url.module_params, callback: nil, isDefault404: true)
+    }
+}

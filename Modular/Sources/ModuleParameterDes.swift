@@ -64,7 +64,6 @@ import ObjectiveC
         self.paramType = paramType
     }
     
-    
     func name(_ paramName: String) -> ModuleParameter {
         self.paramName = paramName
         return self

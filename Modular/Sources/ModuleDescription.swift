@@ -7,7 +7,7 @@
 
 import UIKit
 
-@objc (ModuleProtocol)
+@objc(ModuleProtocol)
 
 public protocol ModuleProtocol: NSObjectProtocol {
     /// 模块描述协议
