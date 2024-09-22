@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = "SModular"
-    s.version      = "0.0.7"
+    s.version      = "0.0.8"
     s.ios.deployment_target = '11.0'
     s.summary      = "SModular"
     s.homepage     = "https://github.com/gu0315/Modular"
@@ -25,6 +25,6 @@ Pod::Spec.new do |s|
     s.user_target_xcconfig = { 'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' => 'YES' }
 
     s.swift_version = "5.0"
-    s.swift_versions = ['5.0', '5.1']
+    s.swift_versions = ['5.0', '5.1', '6.0']
 end
 

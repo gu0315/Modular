@@ -9,7 +9,7 @@ import UIKit
 
 class ModuleConfig: NSObject {
     
-    public var default404ModuleURL: String?
+    private var default404ModuleURL: String?
     
     public static let share = ModuleConfig()
     
@@ -17,4 +17,7 @@ class ModuleConfig: NSObject {
         super.init()
     }
     
+    public func override404ModuleURL(_ url: String) {
+        default404ModuleURL = url
+    }
 }
