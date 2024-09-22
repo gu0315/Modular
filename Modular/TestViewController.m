@@ -36,13 +36,6 @@
 
 - (void)push:(NSDictionary *)dic callback:(void(^ __nullable)( NSDictionary * _Nullable moduleInfo))callback {
     TestViewController *vc = [[TestViewController alloc] init];
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&error];
-    if (!jsonData) {
-        vc.str =  @"{}";
-    } else {
-        vc.str = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    }
     callback(@{@"key":@"value"});
     UIViewController *topVc = [TestViewController applicationTopVC];
     [topVc.navigationController pushViewController:vc animated:YES];
@@ -95,6 +88,4 @@
             }];
         });
 }
-
-
 @end

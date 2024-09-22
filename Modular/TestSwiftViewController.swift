@@ -36,9 +36,9 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
             .method { method in
                 method.classMethod(true)
                       .name("push")
-                      .selector(selector: #selector(push(str:callback:)))
+                      .selector(selector: #selector(push(dic:callback:)))
                       .parameterDescription { enumerator in
-                          enumerator.next()?.add(paramName: "str", paramType: .String)
+                          enumerator.next()?.add(paramName: "dic", paramType: .Map)
                           enumerator.next()?.add(paramName: "callback", paramType: .Block)
                       }
             }
@@ -67,6 +67,14 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
                       }
             }
             .method { method in
+                method.name("otherParam")
+                    .selector(selector: #selector(otherParam1(dic: str:)))
+                    .parameterDescription { enumerator in
+                        enumerator.next()?.add(paramName: "Map", paramType: .Map)
+                        enumerator.next()?.add(paramName: "String", paramType: .String)
+                    }
+            }
+            .method { method in
                 method.name("multiparameter")
                       .selector(selector: #selector(multiparams(params1: params2: params3: params4: callback:)))
                       .parameterDescription { enumerator in
@@ -79,14 +87,18 @@ class TestSwiftViewController: UIViewController, ModuleProtocol {
             }
     }
     
+    @objc func otherParam1(dic: [String: Any], str: String) {
+        print("-----", str)
+    }
+    
     
     @objc func printLog(logString: String, callback: ([String: Any]) -> Void) {
         print(logString)
     }
     
-    @objc class func push(str: String, callback: ([String: Any]) -> Void) {
+    @objc class func push(dic: [String: Any], callback: ([String: Any]) -> Void) {
         let vc = TestSwiftViewController()
-        vc.str = str
+        vc.str = dic.description
         callback(["key": "我已经push啦"])
         guard let topVc = TestSwiftViewController.applicationTopVC() else {
             return

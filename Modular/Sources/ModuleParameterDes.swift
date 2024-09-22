@@ -58,10 +58,13 @@ import ObjectiveC
     var paramName: String
     // 参数类型
     var paramType: ModuleParameterType
+    // 是否严格匹配
+    var isStrict: Bool
 
-    init(paramName: String, paramType: ModuleParameterType) {
+    init(paramName: String, paramType: ModuleParameterType, isStrict: Bool = true) {
         self.paramName = paramName
         self.paramType = paramType
+        self.isStrict = isStrict
     }
     
     func name(_ paramName: String) -> ModuleParameter {
@@ -75,9 +78,10 @@ import ObjectiveC
     }
     
     @discardableResult
-    @objc func add(paramName: String,  paramType: ModuleParameterType, isStrict: Bool = false) -> ModuleParameter {
+    @objc func add(paramName: String,  paramType: ModuleParameterType, isStrict: Bool = true) -> ModuleParameter {
         self.paramName = paramName
         self.paramType = paramType
+        self.isStrict = isStrict
         return self
     }
     
